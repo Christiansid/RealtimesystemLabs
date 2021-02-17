@@ -1,6 +1,15 @@
 public class PID {
     // Current PID parameters
     private PIDParameters p;
+    private double e;
+    private double I;
+    private double v;
+    private final double ad;
+    private final double bd;
+    private final double bi;
+    private double D;
+    private double yOld;
+    private double w;
 
     /** Add more private variables here if needed */
 
@@ -8,20 +17,45 @@ public class PID {
     public PID() {
         p = new PIDParameters();
         // Initial PID Variables
-        p.Beta          = ...;
-        p.H             = ...;
-        p.integratorOn  = ...;
-        p.K             = ...;
-        p.N             = ...;
-        p.Td            = ...;
-        p.Ti            = ...;
-        p.Tr            = ...;
+        p.Beta          = 1;
+        p.H             = 1;
+        p.integratorOn  = true;
+        p.K             = 1;
+        p.N             = 1;
+        p.Td            = 1;
+        p.Ti            = 1;
+        p.Tr            = 1;
+        
+        this.e 			= 0;
+        this.I			= 0;
+        this.v			= 0;
+        this.D			= 0;
+        this.yOld		= 0;
+        
+        this.ad = p.Td/(p.Td + p.N*p.H);
+        this.bd = p.K*p.N*this.ad;
+        this.bi = p.K * p.H /p.Ti;
+
+       
     }
 
     // Calculates the control signal v.
     // Called from BallAndBeamRegul.
     public synchronized double calculateOutput(double y, double yref) {
         /** Written by you */
+    	this.e = yref - y;
+    	//Calculate P and D
+    	double P = p.K*(p.Beta * yref-y);
+    	
+    	//Approximation backward difference
+    	this.D = this.ad*this.D - this.bd*(y-yOld);
+    	
+    	//Calculate output
+    	this.v = P + this.I + this.D;
+    	//this.v = this.v < -(p.Tr) ? -(p.Tr) : (this.v > p.Tr ? p.Tr: this.v);
+    	
+    	//Saving old output 
+    	return this.v;
     }
 
     // Updates the controller state.
@@ -29,12 +63,19 @@ public class PID {
     // Called from BallAndBeamRegul.
     public synchronized void updateState(double u) {
         /** Written by you */
+    	if(p.integratorOn) {
+    		this.I = this.I + this.bi*this.e + (u-v) * p.H/p.Tr;
+    	}else {
+    		this.I = 0;
+    	}
+    	this.yOld = this.v;
     }
 
     // Returns the sampling interval expressed as a long.
     // Explicit type casting needed.
     public synchronized long getHMillis() {
         /** Written by you */
+    	return (long) p.H*1000;
     }
 
     // Sets the PIDParameters.
@@ -42,16 +83,19 @@ public class PID {
     // Must clone newParameters.
     public synchronized void setParameters(PIDParameters newParameters) {
         /** Written by you */
+    	this.p = (PIDParameters) newParameters.clone();
+    	if(p.integratorOn) this.I = 0;
     }
 
     // Sets the I-part of the controller to 0.
     // For example needed when changing controller mode.	
     public synchronized void reset() {
         /** Written by you */
+    	this.I = 0;
     }
 
     // Returns the current PIDParameters.
     public synchronized PIDParameters getParameters() {
-        /** Written by you */
+    	return this.p;
     }
 }

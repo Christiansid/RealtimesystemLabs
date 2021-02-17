@@ -3,15 +3,15 @@ import javax.swing.*;
 public class Main { 
     public static void main(String[] argv) { 
 
-        // Initialise monitor
+        // Initialize monitor
         ModeMonitor modeMon = new ModeMonitor();
 
         // Set thread priorities
-        final int regulPriority     = ...; 
-        final int refGenPriority    = ...; 
-        final int plotterPriority   = ...; 
+        final int regulPriority     = 1; 
+        final int refGenPriority    = 2; 
+        final int plotterPriority   = 3; 
 
-        // Initialise Control system parts
+        // Initialize Control system parts
         ReferenceGenerator refgen = new ReferenceGenerator(refGenPriority); 
         Regul regul = new Regul(regulPriority, modeMon); 
         final OpCom opcom = new OpCom(plotterPriority, modeMon); // Must be declared final since it is used in an inner class
@@ -39,3 +39,4 @@ public class Main {
         regul.start(); 
     } 
 } 
+
