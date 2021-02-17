@@ -122,6 +122,7 @@ public class Regul extends Thread {
             switch (modeMon.getMode()) {
                 case OFF: {
                     /** Written by you */
+                	System.out.println("Off");
                 	y = 0;
                 	u = 0;
                 	yRef = 0;
