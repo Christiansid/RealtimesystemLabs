@@ -54,7 +54,7 @@ public class PI {
     // Note: Explicit type casting needed
     public synchronized long getHMillis() {
         /** Written by you */
-    	return (long) p.H*1000;
+    	return (long) (p.H*1000);
     }
 
     // Sets the PIParameters.

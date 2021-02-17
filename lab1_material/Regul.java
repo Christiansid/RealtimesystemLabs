@@ -87,53 +87,73 @@ public class Regul extends Thread {
 
         long duration;
         long t = System.currentTimeMillis();
+        
+        double yBeam = 0;
+        double yBeamRef = 0;
+        double uBeam = 0;
+        
+        double yBall = 0;
+        double yBallRef = 0;
+        double uBall = 0;
         starttime = t;
 
         while (shouldRun) {
             /** Written by you */
+        	yBall = this.ballBeam.getBallPos();
+    		yBallRef = this.refGen.getRef();
+        	synchronized(outer) {
+        		uBall = this.limit(this.outer.calculateOutput(yBall, yBallRef));
+        		this.outer.updateState(uBall);
+        		
+            	yBeam = this.ballBeam.getBeamAngle();
+            	yBeamRef = uBall;
+            	
+            	synchronized(inner) {
+            		uBeam = this.limit(this.inner.calculateOutput(yBeam, yBeamRef));
+            		this.inner.updateState(uBeam);
+            		
+            	}
+            	
+        	}
+
         	double yRef = this.refGen.getRef();
         	double y;
         	double u;
             switch (modeMon.getMode()) {
                 case OFF: {
                     /** Written by you */
-                	shouldRun = false;
-                	this.inner.reset();
-                	this.outer.reset();
                 	y = 0;
                 	u = 0;
+                	yRef = 0;
+                	this.inner.reset();
+                	this.outer.reset();
                     break;
                 }
                 case BEAM: {
-                    /** Written by you */
-            		y = this.ballBeam.getBeamAngle();
-                	synchronized(this.inner) {
-                		double v = this.inner.calculateOutput(y, yRef);
-                		u = this.limit(v);
-                		this.inner.updateState(u);
-                	}
+                	System.out.println("Beam");
+                    y = yBeam;
+                    u = uBeam;
+                    yRef = yBeamRef;
 
                     break;
                 }
                 case BALL: {
                     /** Written by you */
-            		y = this.ballBeam.getBallPos();
-                	synchronized(this.outer) {
-                		double v = this.outer.calculateOutput(y, yRef);
-                		u = this.limit(v);
-                		this.outer.updateState(u);
-                	}
-                	
+                	System.out.println("Ball");
+            		y = yBall;
+            		u = uBall;
+            		yRef = yBallRef;
                     break;
                 }
                 default: {
                     System.out.println("Error: Illegal mode.");
                     y = 0;
                     u = 0;
+                    yRef = 0;
                     break;
                 }
             }
-    		this.ballBeam.setControlSignal(u);
+            this.ballBeam.setControlSignal(u);
             this.sendDataToOpCom(yRef, y, u);
 
             // sleep
@@ -147,6 +167,7 @@ public class Regul extends Thread {
                 System.out.println("Lagging behind...");
             }
         }
+        
         ballBeam.setControlSignal(0.0);
     }
 }
