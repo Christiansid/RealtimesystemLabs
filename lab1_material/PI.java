@@ -13,11 +13,13 @@ public class PI {
         p = new PIParameters();
         // Initial PI Variables
         p.Beta          = 1;
-        p.H             = 1;
-        p.integratorOn  = true;
+        p.H             = 0.1;
+        p.integratorOn  = false;
         p.K             = 1;
-        p.Ti            = 1;
-        p.Tr            = 1;
+        p.Ti            = 0;
+        p.Tr            = 10;
+        this.setParameters(p);
+        
         this.e 			= 0;
         this.I 			= 0;
         
@@ -30,11 +32,10 @@ public class PI {
         /** Written by you */
     	//Calculate error
     	this.e = yref - y;
-    	//Calculate P 
-    	double P = p.K*(p.Beta * yref-y);
-    	//Calculate and return output
+    	//Calculate P
+    	double P = p.K*( (p.Beta * yref) -y);
+    	//Calculate control signal
     	this.v = P+this.I;
-    	// this.v = this.v < -(p.Tr) ? -(p.Tr) : (this.v > p.Tr ? p.Tr: this.v);
     	return this.v;
     }
 
@@ -63,7 +64,7 @@ public class PI {
     public synchronized void setParameters(PIParameters newParameters) {
         /** Written by you */
     	this.p = (PIParameters) newParameters.clone();
-    	if(p.integratorOn) this.I = 0;
+    	if(!p.integratorOn) this.I = 0;
     }
 
     // Sets the I-part of the controller to 0.

@@ -9,7 +9,9 @@ public class PID {
     private final double bi;
     private double D;
     private double yOld;
+    private double eOld;
     private double w;
+    private double y;
 
     /** Add more private variables here if needed */
 
@@ -17,20 +19,23 @@ public class PID {
     public PID() {
         p = new PIDParameters();
         // Initial PID Variables
+        p.N             = 7;
+        p.Td            = 1.0;
         p.Beta          = 1;
-        p.H             = 1;
+        p.H             = 0.1;
         p.integratorOn  = true;
-        p.K             = 1;
-        p.N             = 1;
-        p.Td            = 1;
-        p.Ti            = 1;
-        p.Tr            = 1;
+        p.K             = -0.1;
+        p.Ti            = 3;
+        p.Tr            = 10;
+        this.setParameters(p);
         
         this.e 			= 0;
+        this.y 			= 0;
         this.I			= 0;
         this.v			= 0;
         this.D			= 0;
         this.yOld		= 0;
+        this.eOld		= 0;
         
         this.ad = p.Td/(p.Td + p.N*p.H);
         this.bd = p.K*p.N*this.ad;
@@ -44,11 +49,12 @@ public class PID {
     public synchronized double calculateOutput(double y, double yref) {
         /** Written by you */
     	this.e = yref - y;
+    	this.y = y;
     	//Calculate P and D
-    	double P = p.K*(p.Beta * yref-y);
+    	double P = p.K*((p.Beta * yref) -y);
     	
     	//Approximation backward difference
-    	this.D = this.ad*this.D - this.bd*(y-yOld);
+    	this.D = this.ad*this.D - this.bd*(y-this.yOld);
     	
     	//Calculate output
     	this.v = P + this.I + this.D;
@@ -68,7 +74,8 @@ public class PID {
     	}else {
     		this.I = 0;
     	}
-    	this.yOld = this.v;
+    	this.yOld = this.y;
+    	this.eOld = this.e;
     }
 
     // Returns the sampling interval expressed as a long.
@@ -84,7 +91,7 @@ public class PID {
     public synchronized void setParameters(PIDParameters newParameters) {
         /** Written by you */
     	this.p = (PIDParameters) newParameters.clone();
-    	if(p.integratorOn) this.I = 0;
+    	if(!p.integratorOn) this.I = 0;
     }
 
     // Sets the I-part of the controller to 0.

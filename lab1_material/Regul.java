@@ -87,6 +87,11 @@ public class Regul extends Thread {
 
         long duration;
         long t = System.currentTimeMillis();
+        starttime = t;
+        
+        double y = 0;
+        double yRef = 0;
+        double u = 0;
         
         double yBeam = 0;
         double yBeamRef = 0;
@@ -95,30 +100,26 @@ public class Regul extends Thread {
         double yBall = 0;
         double yBallRef = 0;
         double uBall = 0;
-        starttime = t;
+
 
         while (shouldRun) {
             /** Written by you */
         	yBall = this.ballBeam.getBallPos();
     		yBallRef = this.refGen.getRef();
         	synchronized(outer) {
-        		uBall = this.limit(this.outer.calculateOutput(yBall, yBallRef));
+        		uBall = this.limit(this.outer.calculateOutput(yBall, yBallRef)) - this.refGen.getPhiff();
         		this.outer.updateState(uBall);
         		
-            	yBeam = this.ballBeam.getBeamAngle();
-            	yBeamRef = uBall;
-            	
-            	synchronized(inner) {
-            		uBeam = this.limit(this.inner.calculateOutput(yBeam, yBeamRef));
-            		this.inner.updateState(uBeam);
-            		
-            	}
-            	
         	}
-
-        	double yRef = this.refGen.getRef();
-        	double y;
-        	double u;
+        	yBeam = this.ballBeam.getBeamAngle();
+        	yBeamRef = uBall;
+        	
+        	synchronized(inner) {
+        		uBeam = this.limit(this.inner.calculateOutput(yBeam, yBeamRef)) - this.refGen.getUff();
+        		this.inner.updateState(uBeam);	
+        	}
+        	this.ballBeam.setControlSignal(uBeam);
+        	
             switch (modeMon.getMode()) {
                 case OFF: {
                     /** Written by you */
@@ -154,7 +155,6 @@ public class Regul extends Thread {
                     break;
                 }
             }
-            this.ballBeam.setControlSignal(u);
             this.sendDataToOpCom(yRef, y, u);
 
             // sleep
