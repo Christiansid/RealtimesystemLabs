@@ -123,7 +123,6 @@ public class Regul extends Thread {
             switch (modeMon.getMode()) {
                 case OFF: {
                     /** Written by you */
-                	System.out.println("Off");
                 	y = 0;
                 	u = 0;
                 	yRef = 0;
@@ -132,7 +131,6 @@ public class Regul extends Thread {
                     break;
                 }
                 case BEAM: {
-                	System.out.println("Beam");
                     y = yBeam;
                     u = uBeam;
                     yRef = yBeamRef;
@@ -141,7 +139,6 @@ public class Regul extends Thread {
                 }
                 case BALL: {
                     /** Written by you */
-                	System.out.println("Ball");
             		y = yBall;
             		u = uBall;
             		yRef = yBallRef;

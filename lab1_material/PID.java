@@ -4,9 +4,9 @@ public class PID {
     private double e;
     private double I;
     private double v;
-    private final double ad;
-    private final double bd;
-    private final double bi;
+    private double ad;
+    private double bd;
+    private double bi;
     private double D;
     private double yOld;
     private double eOld;
@@ -19,12 +19,12 @@ public class PID {
     public PID() {
         p = new PIDParameters();
         // Initial PID Variables
-        p.N             = 7;
-        p.Td            = 1.0;
+        p.N             = 12;
+        p.Td            = 1.5;
         p.Beta          = 1;
         p.H             = 0.1;
         p.integratorOn  = true;
-        p.K             = -0.1;
+        p.K             = -0.2;
         p.Ti            = 3;
         p.Tr            = 10;
         this.setParameters(p);
@@ -54,13 +54,11 @@ public class PID {
     	double P = p.K*((p.Beta * yref) -y);
     	
     	//Approximation backward difference
-    	this.D = this.ad*this.D - this.bd*(y-this.yOld);
+    	this.D = this.ad*this.D + this.bd*(e-this.eOld);
     	
     	//Calculate output
     	this.v = P + this.I + this.D;
-    	//this.v = this.v < -(p.Tr) ? -(p.Tr) : (this.v > p.Tr ? p.Tr: this.v);
-    	
-    	//Saving old output 
+
     	return this.v;
     }
 
@@ -70,10 +68,14 @@ public class PID {
     public synchronized void updateState(double u) {
         /** Written by you */
     	if(p.integratorOn) {
+            this.bi = p.K * p.H /p.Ti;
     		this.I = this.I + this.bi*this.e + (u-v) * p.H/p.Tr;
     	}else {
     		this.I = 0;
     	}
+        this.ad = p.Td/(p.Td + p.N*p.H);
+        this.bd = p.K*p.N*this.ad;
+
     	this.yOld = this.y;
     	this.eOld = this.e;
     }

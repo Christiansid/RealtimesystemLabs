@@ -4,7 +4,7 @@ public class PI {
     private double e;
     private double v;
     private double I;
-    private final double bi;
+    private double bi;
 
     /** Add more private variables here if needed */
 
@@ -45,6 +45,7 @@ public class PI {
     public synchronized void updateState(double u) {
         /** Written by you */
     	if(p.integratorOn) {
+            this.bi = p.K * p.H /p.Ti;
     		this.I = this.I + this.bi*this.e + (u-v) * p.H/p.Tr;
     	}else {
     		this.I = 0;
