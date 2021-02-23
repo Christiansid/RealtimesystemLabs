@@ -1,61 +1,51 @@
 public class PI {
     // Current PI parameters
     private PIParameters p;
-    private double e;
-    private double v;
-    private double I;
-    private double bi;
 
-    /** Add more private variables here if needed */
+    private double I = 0; // Integral part of controller
+    private double e = 0; // Error signal
+    private double v = 0; // Output from controller
 
     // Constructor
     public PI() {
         p = new PIParameters();
+        
         // Initial PI Variables
-        p.Beta          = 1;
-        p.H             = 0.1;
-        p.integratorOn  = false;
-        p.K             = 1;
-        p.Ti            = 0;
-        p.Tr            = 10;
-        this.setParameters(p);
-        
-        this.e 			= 0;
-        this.I 			= 0;
-        
-        this.bi = p.K * p.H /p.Ti;
+        p.Beta=1.0;
+        p.H=0.1;
+        p.integratorOn=false;
+        p.K=1.0;
+        p.Ti=0.0;
+        p.Tr=10.0;
+		
+		setParameters(p);
     }
 
     // Calculates the control signal v.
     // Called from BeamRegul.
     public synchronized double calculateOutput(double y, double yref) {
-        /** Written by you */
-    	//Calculate error
-    	this.e = yref - y;
-    	//Calculate P
-    	double P = p.K*( (p.Beta * yref) -y);
-    	//Calculate control signal
-    	this.v = P+this.I;
-    	return this.v;
+    	e=yref-y;
+		v = p.K*((p.Beta*yref)-y) + I;
+        return v;
     }
-
+  
     // Updates the controller state.
     // Should use tracking-based anti-windup
     // Called from BeamRegul.
     public synchronized void updateState(double u) {
-        /** Written by you */
     	if(p.integratorOn) {
-            this.bi = p.K * p.H /p.Ti;
-    		this.I = this.I + this.bi*this.e + (u-v) * p.H/p.Tr;
-    	}else {
-    		this.I = 0;
-    	}
+			double ar=p.H/p.Tr;
+			double bi=p.H/p.Ti;
+			I+=(p.K*bi*e)+(ar*(u-v));
+			
+		}else {
+			I=0.0;
+		}	
     }
 
     // Returns the sampling interval expressed as a long.
     // Note: Explicit type casting needed
     public synchronized long getHMillis() {
-        /** Written by you */
     	return (long) (p.H*1000);
     }
 
@@ -63,21 +53,20 @@ public class PI {
     // Called from PIGUI.
     // Must clone newParameters.
     public synchronized void setParameters(PIParameters newParameters) {
-        /** Written by you */
-    	this.p = (PIParameters) newParameters.clone();
-    	if(!p.integratorOn) this.I = 0;
+    	p=(PIParameters)newParameters.clone();
+		if(!p.integratorOn) {
+			I=0.0;
+		}
     }
 
     // Sets the I-part of the controller to 0.
     // For example needed when changing controller mode.
     public synchronized void reset() {
-        /** Written by you */
-    	this.I = 0;
+    	I=0.0;
     }
 
     // Returns the current PIParameters.
     public synchronized PIParameters getParameters() {
-        /** Written by you */
-    	return this.p;
+    	return p;
     }
 }

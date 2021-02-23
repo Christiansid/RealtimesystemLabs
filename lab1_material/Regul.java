@@ -25,14 +25,12 @@ public class Regul extends Thread {
 
     /** Sets OpCom (called from main) */
     public void setOpCom(OpCom opCom) {
-        /** Written by you */
-    	this.opCom = opCom;
+    	this.opCom=opCom;
     }
 
     /** Sets ReferenceGenerator (called from main) */
     public void setRefGen(ReferenceGenerator refGen) {
-        /** Written by you */
-    	this.refGen = refGen;
+    	this.refGen=refGen;
     }
 
     // Called in every sample in order to send plot data to OpCom
@@ -44,26 +42,22 @@ public class Regul extends Thread {
 
     // Sets the inner controller's parameters
     public void setInnerParameters(PIParameters p) {
-        /** Written by you */
-    	this.inner.setParameters(p);
+    	inner.setParameters(p);
     }
 
     // Gets the inner controller's parameters
     public PIParameters getInnerParameters() {
-        /** Written by you */
-    	return this.inner.getParameters();
+    	return inner.getParameters();
     }
 
     // Sets the outer controller's parameters
     public void setOuterParameters(PIDParameters p) {
-        /** Written by you */
-    	this.outer.setParameters(p);
+    	outer.setParameters(p);
     }
 
     // Gets the outer controller's parameters
     public PIDParameters getOuterParameters(){
-        /** Written by you */
-    	return this.outer.getParameters();
+    	return outer.getParameters();
     }
 
     // Called from OpCom when shutting down
@@ -88,71 +82,68 @@ public class Regul extends Thread {
         long duration;
         long t = System.currentTimeMillis();
         starttime = t;
-        
-        double y = 0;
-        double yRef = 0;
-        double u = 0;
-        
-        double yBeam = 0;
-        double yBeamRef = 0;
-        double uBeam = 0;
-        
-        double yBall = 0;
-        double yBallRef = 0;
-        double uBall = 0;
 
-
+        double yRef=0; 
+		double y=0; 
+		double u=0; 
+		
+		double PIref=0;
+		double PIy=0;
+		double PIu=0;
+		
+		double PIDref=0;
+		double PIDy=0;
+		double PIDu=0;
+        
         while (shouldRun) {
-            /** Written by you */
-        	yBall = this.ballBeam.getBallPos();
-    		yBallRef = this.refGen.getRef();
-        	synchronized(outer) {
-        		uBall = this.limit(this.outer.calculateOutput(yBall, yBallRef)) - this.refGen.getPhiff();
-        		this.outer.updateState(uBall);
-        		
-        	}
-        	yBeam = this.ballBeam.getBeamAngle();
-        	yBeamRef = uBall;
-        	
-        	synchronized(inner) {
-        		uBeam = this.limit(this.inner.calculateOutput(yBeam, yBeamRef)) - this.refGen.getUff();
-        		this.inner.updateState(uBeam);	
-        	}
-        	this.ballBeam.setControlSignal(uBeam);
-        	
+        	PIDy = ballBeam.getBallPos();
+            PIDref = refGen.getRef(); 
+ 
+            synchronized(outer) {
+ 
+            	PIDu = limit(outer.calculateOutput(PIDy, PIDref));
+            	PIDu-=refGen.getPhiff();
+            	outer.updateState(PIDu);
+            	PIref=PIDu;
+ 
+            	synchronized(inner) {
+            		PIy=ballBeam.getBeamAngle();
+            		PIu=limit(inner.calculateOutput(PIy, PIref));
+            		PIu-=refGen.getUff();
+            		inner.updateState(PIu);
+            		ballBeam.setControlSignal(PIu);
+
+            	}	
+            }
+
             switch (modeMon.getMode()) {
                 case OFF: {
-                    /** Written by you */
-                	y = 0;
-                	u = 0;
-                	yRef = 0;
-                	this.inner.reset();
-                	this.outer.reset();
-                    break;
+                	yRef=y=u=0;
+                	inner.reset();
+                	outer.reset();
+                	break;
                 }
                 case BEAM: {
-                    y = yBeam;
-                    u = uBeam;
-                    yRef = yBeamRef;
-
+                	yRef=PIref;
+                	y=PIy;
+                	u=PIu;
+                	
                     break;
                 }
                 case BALL: {
-                    /** Written by you */
-            		y = yBall;
-            		u = uBall;
-            		yRef = yBallRef;
+                	yRef=PIDref;
+                	y=PIDy;
+                	u=PIDu;
+
                     break;
                 }
                 default: {
                     System.out.println("Error: Illegal mode.");
-                    y = 0;
-                    u = 0;
-                    yRef = 0;
                     break;
                 }
             }
-            this.sendDataToOpCom(yRef, y, u);
+
+            sendDataToOpCom(yRef, y, u);
 
             // sleep
             t = t + inner.getHMillis();
@@ -165,7 +156,6 @@ public class Regul extends Thread {
                 System.out.println("Lagging behind...");
             }
         }
-        
         ballBeam.setControlSignal(0.0);
     }
 }
