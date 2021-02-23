@@ -1,61 +1,86 @@
 public class PID {
     // Current PID parameters
     private PIDParameters p;
+    private double e;
+    private double I;
+    private double v;
+    private double ad;
+    private double bd;
+    private double bi;
+    private double D;
+    private double yOld;
+    private double eOld;
+    private double y;
 
-    private double I = 0; // Integral part of PID
-    private double D = 0; // Derivative part of PID
-    private double v = 0; // Computed control signal
-    private double e = 0; // Error signal
-    private double y = 0; // Measurement signal
-    private double yOld = 0; // Old measurement signal
-    private double ad; // Help variable for Derivative calculation
-    private double bd; // Help variable for Derivative calculation
+    /** Add more private variables here if needed */
 
     // Constructor
     public PID() {
         p = new PIDParameters();
         // Initial PID Variables
-        p.Beta = 1.0;
-		p.H = 0.1;
-		p.integratorOn = false;
-		p.K = -0.1;
-		p.Ti = 0.0;
-		p.Tr = 10.0;
-		p.Td = 4.0; 
-		p.N = 7.0; 
-		setParameters(p); 
+        p.N             = 10; //Derivative gain
+        p.Td            = 2; //Derivative time
+        p.Beta          = 1;
+        p.H             = 0.02; //Sample time
+        p.integratorOn  = true;
+        p.K             = -0.2; //Gain
+        p.Ti            = 7;   //Integrator time
+        p.Tr            = 10;	
+        this.setParameters(p);
+        
+        this.e 			= 0;
+        this.y 			= 0;
+        this.I			= 0;
+        this.v			= 0;
+        this.D			= 0;
+        this.yOld		= 0;
+        this.eOld		= 0;
+        
+        this.ad = p.Td/(p.Td + p.N*p.H);
+        this.bd = p.K*p.N*this.ad;
+        this.bi = p.K * p.H /p.Ti;
+
+       
     }
 
     // Calculates the control signal v.
     // Called from BallAndBeamRegul.
     public synchronized double calculateOutput(double y, double yref) {
-    	this.y = y; 
-		e = yref-y;
-		ad = p.Td/(p.Td+p.N*p.H); 
-		bd = p.K*p.N*ad; 
-		D = D*ad-bd*(y-yOld);
-		v = p.K*((p.Beta*yref)-y) + I + D;
-		return v;
+        /** Written by you */
+    	this.e = yref - y;
+    	this.y = y;
+    	//Calculate P and D
+    	double P = p.K*((p.Beta * yref) -y);
+    	
+    	//Approximation backward difference
+    	this.D = this.ad*this.D + this.bd*(e-this.eOld);
+    	
+    	//Calculate output
+    	this.v = P + this.I + this.D;
+    	
+    	//Saving old output 
+    	return this.v;
     }
 
     // Updates the controller state.
     // Should use tracking-based anti-windup
     // Called from BallAndBeamRegul.
     public synchronized void updateState(double u) {
+        /** Written by you */
     	if(p.integratorOn) {
-			double ar=p.H/p.Tr;
-			double bi=p.H/p.Ti;
-			I+=(p.K*bi*e)+(ar*(u-v));
- 
-		}else {
-			I=0.0;
-		}	
-		yOld = y; 
+    		this.I = this.I + this.bi*this.e + (u-v) * p.H/p.Tr;
+    	}else {
+    		this.I = 0;
+    	}
+    	this.yOld = this.y;
+    	this.eOld = this.e;
+
     }
 
     // Returns the sampling interval expressed as a long.
     // Explicit type casting needed.
     public synchronized long getHMillis() {
+        /** Written by you */
     	return (long) (p.H*1000);
     }
 
@@ -63,20 +88,24 @@ public class PID {
     // Called from PIDGUI.
     // Must clone newParameters.
     public synchronized void setParameters(PIDParameters newParameters) {
-    	p=(PIDParameters)newParameters.clone();
-		if(!p.integratorOn) {
-			I=0.0;
-		}
+        /** Written by you */
+    	this.p = (PIDParameters) newParameters.clone();
+    	if(!p.integratorOn) this.I = 0;
+    	
+    	this.ad = p.Td/(p.Td + p.N*p.H);
+	    this.bd = p.K*p.N*this.ad;
+	    this.bi = p.K * p.H /p.Ti;
     }
 
     // Sets the I-part of the controller to 0.
     // For example needed when changing controller mode.	
     public synchronized void reset() {
-        I=0.0;
+        /** Written by you */
+    	this.I = 0;
     }
 
     // Returns the current PIDParameters.
     public synchronized PIDParameters getParameters() {
-    	return p;
+    	return this.p;
     }
 }
