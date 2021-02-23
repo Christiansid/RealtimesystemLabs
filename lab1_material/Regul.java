@@ -96,17 +96,17 @@ public class Regul extends Thread {
         double PIy = 0;
         double PIref = 0;
         double PIu = 0;
+        double uff;
         
         double PIDy = 0;
         double PIDref = 0;
         double PIDu = 0;
+        double phiff;
 
 
         while (shouldRun) {
             /** Written by you */
-        	PIDy = this.ballBeam.getBallPos();
-    		PIDref = this.refGen.getRef();
-        	
+        	yRef = this.refGen.getRef();
         	
             switch (modeMon.getMode()) {
                 case OFF: {
@@ -122,35 +122,45 @@ public class Regul extends Thread {
                 case BEAM: {
                 	System.out.println("Beam");
                 	synchronized(inner) {
+                		uff = this.refGen.getUff();
                 		PIy = this.ballBeam.getBeamAngle();
-                		PIref = this.refGen.getRef();
-                		PIu = this.limit(this.inner.calculateOutput(PIy, PIref)) - this.refGen.getUff();
-                		this.inner.updateState(PIu);	
+                		PIref = yRef;
+                		PIu = this.limit(this.inner.calculateOutput(PIy, PIref) + uff);
+                		this.inner.updateState(PIu - this.refGen.getUff());	
+                    	this.ballBeam.setControlSignal(PIu);
                 	}
-                	this.ballBeam.setControlSignal(PIu);
                     y = PIy;
                     u = PIu;
-                    yRef = PIref;
 
                     break;
                 }
                 case BALL: {
                     /** Written by you */
+                	PIDy = this.ballBeam.getBallPos();
+            		PIDref = yRef;
+            		uff = this.refGen.getUff();
+            		phiff = this.refGen.getPhiff();
+            		
                 	synchronized(outer) {
-                		PIDu = this.limit(this.outer.calculateOutput(PIDy, PIDref)) - this.refGen.getPhiff();
+                		PIDu = this.outer.calculateOutput(PIDy, PIDref);
+                		if(PIu >= 10 || PIu <= -10) {
+                			PIDu = this.ballBeam.getBeamAngle() - phiff;
+                		}else {
+                			PIDu = PIDu -phiff;
+                		}
                 		this.outer.updateState(PIDu);
                 		
-                	}
+                	
                 	PIy = this.ballBeam.getBeamAngle();
                 	PIref = PIDu;
                 	
                 	synchronized(inner) {
-                		PIu = this.limit(this.inner.calculateOutput(PIy, PIref)) - this.refGen.getUff();
-                		this.inner.updateState(PIu);
+                		PIu = this.limit(this.inner.calculateOutput(PIy, PIref) + uff);
+                		this.inner.updateState(PIu-uff);
                     	this.ballBeam.setControlSignal(PIu);
                 	}
+                	}
                 	y = PIDy;
-                	yRef = PIDref;
                 	u = PIDu;
                 	
                     break;

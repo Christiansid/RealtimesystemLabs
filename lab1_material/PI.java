@@ -13,9 +13,9 @@ public class PI {
         p = new PIParameters();
         // Initial PI Variables
         p.Beta          = 1;
-        p.H             = 0.1;
+        p.H             = 0.03;
         p.integratorOn  = false;
-        p.K             = 1;
+        p.K             = 2;
         p.Ti            = 0;
         p.Tr            = 10;
         this.setParameters(p);

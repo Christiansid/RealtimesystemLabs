@@ -18,12 +18,12 @@ public class PID {
     public PID() {
         p = new PIDParameters();
         // Initial PID Variables
-        p.N             = 10; //Derivative gain
-        p.Td            = 2; //Derivative time
+        p.N             = 11; //Derivative gain
+        p.Td            = 1.5; //Derivative time
         p.Beta          = 1;
-        p.H             = 0.02; //Sample time
+        p.H             = 0.03; //Sample time
         p.integratorOn  = true;
-        p.K             = -0.2; //Gain
+        p.K             = -0.14; //Gain
         p.Ti            = 7;   //Integrator time
         p.Tr            = 10;	
         this.setParameters(p);
