@@ -1,0 +1,10 @@
+#! /bin/bash
+
+# Your Custom IO package name, e.g. myCustomIO (means grafchart.sfc.io.myCustomIO)
+customIOPackage=
+# Your Custom IO class name, i.e. the class implementing the LocalIO interface
+customIOClass=
+
+################################################################################
+
+"`dirname "$0"`/../run" -localIO grafchart.sfc.io.$customIOPackage.$customIOClass "$@"

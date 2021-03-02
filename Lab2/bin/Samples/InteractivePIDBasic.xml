@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<GCDocument color="-1" dimTicks="25" dpwsInterface="" dpwsPort="-1" height="475" horizontalScrollBar="0" modifiable="1" name="InteractivePIDBasic" saveVersion="8" scale="1.09" simulationMode="1" socketHost="" socketIsServer="0" socketPort="-1" socketSendMode="Changed" threadSpeed="40" tokenLuminance="0" verticalScrollBar="0" viewPositionX="0" viewPositionY="0" width="330" x="0" y="0">
+  <GCRectangle draggable="1" fillColor="-6769921" fillStyle="65535" height="26" name="tankLeakLight" penColor="-16777216" penStyle="0" penWidth="0" resizable="1" selectable="1" visible="0" width="3" x="157" y="286"/>
+  <GCRectangle draggable="1" fillColor="-13408513" fillStyle="65535" height="26" name="tankLeak" penColor="-16777216" penStyle="0" penWidth="0" resizable="1" selectable="1" visible="0" width="1" x="158" y="286"/>
+  <GCRectangle draggable="1" fillColor="-6769921" fillStyle="65535" height="159" name="tankFillLight" penColor="-16777216" penStyle="0" penWidth="0" resizable="1" selectable="1" visible="0" width="15" x="151" y="127"/>
+  <GCRectangle draggable="1" fillColor="-13408513" fillStyle="65535" height="159" name="tankFill" penColor="-16777216" penStyle="0" penWidth="0" resizable="1" selectable="1" visible="0" width="13" x="152" y="127"/>
+  <GCRectangle draggable="1" fillColor="-52" fillStyle="65535" height="75" name="" penColor="-16777216" penStyle="65535" penWidth="1" resizable="1" selectable="1" visible="1" width="278" x="7" y="11"/>
+  <RealVariable constant="0" exp="" height="45" initialValue="" name="Level" updated="0" value="0.0" width="75" x="194" y="217"/>
+  <IntegerVariable constant="0" exp="" height="45" initialValue="" name="tankBottom" updated="0" value="287" width="65" x="421" y="101"/>
+  <IntegerVariable constant="0" exp="" height="45" initialValue="" name="tankLeft" updated="0" value="135" width="65" x="417" y="171"/>
+  <GCInitialStep actionBlockVisible="0" actionText="" fileName="" height="70" id="ff15e583-d317-43f1-80c9-201941b146e7" name="" useIcon="0" width="60" x="328" y="11"/>
+  <GCTransition actionText="1" conditionVisible="1" height="25" id="f3e9665e-e002-45bc-8367-12ca80a1d88b" width="30" x="343" y="86"/>
+  <ProcedureStep actionText=";" fileName="" grafcetProcedure="ControlLib.PID" height="70" id="6d3aefc3-9c09-4356-9e43-dedf1310cd75" name="" parameters="R PV = Level;&#10;R SP = LevelRef;&#10;R TR = InPump;&#10;R MV = InPump;&#10;&#10;R K = K;&#10;R Ti = Ti;&#10;R Td = Td;&#10;" useIcon="0" width="60" x="328" y="121"/>
+  <RealVariable constant="0" exp="" height="45" initialValue="0.0" name="InPump" updated="0" value="0.0" width="75" x="194" y="127"/>
+  <IntegerVariable constant="0" exp="" height="45" initialValue="" name="tankMid" updated="0" value="159" width="65" x="497" y="101"/>
+  <GCRectangle draggable="1" fillColor="-13408513" fillStyle="65535" height="0" name="tank" penColor="-16777216" penStyle="0" penWidth="0" resizable="1" selectable="1" visible="1" width="48" x="135" y="287"/>
+  <SFCPlotter boundsHeight="335" boundsWidth="686" boundsX="330" boundsY="0" chan1="Level" chan2="LevelRef" channels="2" height="55" legend="Black = Process Value, Red = Setpoint" name="Level" rgb1="-16777216" rgb2="-65536" updateFreq="1" width="75" x="75" xGrid="12" xRange="60.0" xTicks="12" y="325" yGrid="10" yTicks="5" ymax="100.0" ymin="0.0"/>
+  <SFCPlotter boundsHeight="335" boundsWidth="686" boundsX="330" boundsY="335" chan1="min(1, max(0, InPump))" chan2="" channels="1" height="55" legend="Control signal" name="InPump" rgb1="-16777216" rgb2="-65536" updateFreq="1" width="75" x="165" xGrid="12" xRange="60.0" xTicks="12" y="325" yGrid="10" yTicks="5" ymax="1.0" ymin="0.0"/>
+  <RealVariable constant="0" exp="" height="45" initialValue="" name="LevelRef" updated="0" value="30.0" width="75" x="17" y="100"/>
+  <RealVariable constant="0" exp="" height="45" initialValue="" name="LevelReal" updated="0" value="0.0" width="75" x="417" y="241"/>
+  <RealVariable constant="0" exp="" height="45" initialValue="" name="K" updated="0" value="0.1" width="75" x="17" y="21"/>
+  <RealVariable constant="0" exp="" height="45" initialValue="" name="Ti" updated="0" value="0.0" width="75" x="107" y="21"/>
+  <RealVariable constant="0" exp="" height="45" initialValue="" name="Td" updated="0" value="0.0" width="75" x="197" y="21"/>
+  <IntegerVariable constant="0" exp="" height="45" initialValue="" name="fillWidth" updated="0" value="0" width="65" x="507" y="171"/>
+  <GCInitialStep actionBlockVisible="0" actionText="// Startup&#10;S tankBottom = tank.getYLocation() + tank.getHeight();&#10;S tankLeft = tank.getXLocation();&#10;S tankMid = tankLeft + tank.getWidth()/2;&#10;S tankFill.setVisible(1);&#10;S tankFillLight.setVisible(1);&#10;S tankLeak.setVisible(1);&#10;S tankLeakLight.setVisible(1);&#10;&#10;// Update simulation&#10;P InPump = min(1, max(0, InPump));&#10;P LevelReal = min(100, max(0, LevelReal - sqrt(2*9.81*LevelReal)/100 + InPump));&#10;P Level = min(100, max(0, LevelReal + (random()-0.5)*0.1));&#10;&#10;// Tank content animation&#10;P tank.setHeight(applyStaticMethod(&quot;java.lang.Math&quot;, &quot;ceil&quot;, &quot;real&quot;, &quot;real&quot;, LevelReal));&#10;P tank.setLocation(tankLeft, tankBottom-tank.getHeight());&#10;&#10;// Tank fill animation&#10;P fillWidth = applyStaticMethod(&quot;java.lang.Math&quot;, &quot;ceil&quot;, &quot;real&quot;, &quot;real&quot;, InPump*widthFactor);&#10;P fillWidthDark = max(0, fillWidth - 1 - fillWidth%2);&#10;P fillWidthLight = (fillWidth &lt; 2) ? fillWidth : fillWidthDark + 2*(fillWidth%2);&#10;P tankFill.setWidth(fillWidthDark);&#10;P tankFill.setLocation(tankMid - fillWidthDark/2, tankFill.getYLocation());&#10;P tankFillLight.setWidth(fillWidthLight);&#10;P tankFillLight.setLocation(tankMid - fillWidthLight/2, tankFillLight.getYLocation());&#10;&#10;// Tank leak animation&#10;P leakWidth = applyStaticMethod(&quot;java.lang.Math&quot;, &quot;ceil&quot;, &quot;real&quot;, &quot;real&quot;, (sqrt(2*9.81*LevelReal)/100)*widthFactor);&#10;P leakWidthDark = max(0, leakWidth - 1 - leakWidth%2);&#10;P leakWidthLight = (leakWidth &lt; 2) ? leakWidth : leakWidthDark + 2*(leakWidth%2);&#10;P tankLeak.setWidth(leakWidthDark);&#10;P tankLeak.setLocation(tankMid-leakWidthDark/2, tankLeak.getYLocation());&#10;P tankLeakLight.setWidth(leakWidthLight);&#10;P tankLeakLight.setLocation(tankMid-leakWidthLight/2, tankLeakLight.getYLocation());&#10;&#10;// Shutdown&#10;X tankFill.setVisible(0);&#10;X tankFillLight.setVisible(0);&#10;X tankLeak.setVisible(0);&#10;X tankLeakLight.setVisible(0);&#10;X Level = 0;&#10;X LevelReal = 0;&#10;X fillWidth = 0;&#10;X fillWidthDark = 0;&#10;X fillWidthLight = 0;&#10;X leakWidth = 0;&#10;X leakWidthDark = 0;&#10;X leakWidthLight = 0;&#10;X InPump = 0.0;&#10;X tank.setHeight(0);&#10;X tank.setLocation(tankLeft, tankBottom);&#10;" fileName="" height="70" id="f745bea5-f31f-40d9-8e86-c1871853a62f" name="Sim" useIcon="0" width="60" x="458" y="12"/>
+  <IntegerVariable constant="0" exp="" height="45" initialValue="" name="leakWidth" updated="0" value="0" width="65" x="507" y="241"/>
+  <IntegerVariable constant="1" exp="" height="45" initialValue="15" name="widthFactor" updated="0" value="15" width="65" x="502" y="316"/>
+  <GCStroke arrowEnd="0" arrowStart="0" cubic="0" draggable="1" name="" penColor="-16777216" penStyle="65535" penWidth="3" resizable="1" selectable="1" visible="1">
+    <Stroke x="162" y="288"/>
+    <Stroke x="184" y="288"/>
+    <Stroke x="184" y="187"/>
+  </GCStroke>
+  <GCStroke arrowEnd="0" arrowStart="0" cubic="0" draggable="1" name="" penColor="-16777216" penStyle="65535" penWidth="3" resizable="1" selectable="1" visible="1">
+    <Stroke x="134" y="187"/>
+    <Stroke x="134" y="288"/>
+    <Stroke x="155" y="288"/>
+  </GCStroke>
+  <IntegerVariable constant="0" exp="" height="45" initialValue="" name="fillWidthDark" updated="0" value="0" width="65" x="593" y="171"/>
+  <IntegerVariable constant="0" exp="" height="45" initialValue="" name="fillWidthLight" updated="0" value="0" width="65" x="684" y="171"/>
+  <IntegerVariable constant="0" exp="" height="45" initialValue="" name="leakWidthDark" updated="0" value="0" width="65" x="590" y="241"/>
+  <IntegerVariable constant="0" exp="" height="45" initialValue="" name="leakWidthLight" updated="0" value="0" width="65" x="680" y="241"/>
+  <GCLink fromObject="ff15e583-d317-43f1-80c9-201941b146e7" manAdj="0" toObject="f3e9665e-e002-45bc-8367-12ca80a1d88b">
+    <Stroke x="358" y="82"/>
+    <Stroke x="358" y="92"/>
+    <Stroke x="358" y="92"/>
+    <Stroke x="358" y="75"/>
+    <Stroke x="358" y="75"/>
+    <Stroke x="358" y="85"/>
+  </GCLink>
+  <GCLink fromObject="f3e9665e-e002-45bc-8367-12ca80a1d88b" manAdj="0" toObject="6d3aefc3-9c09-4356-9e43-dedf1310cd75">
+    <Stroke x="358" y="112"/>
+    <Stroke x="358" y="122"/>
+    <Stroke x="358" y="122"/>
+    <Stroke x="358" y="110"/>
+    <Stroke x="358" y="110"/>
+    <Stroke x="358" y="120"/>
+  </GCLink>
+</GCDocument>

@@ -1,0 +1,36 @@
+#!/usr/bin/env python
+
+import os
+import subprocess
+import sys
+
+def main():
+	lib = "../lib"
+	code = "../Code"
+	classpath = "{0}:{1}/JGrafchart.jar:{1}/JGo.jar:{1}/regler.jar:{1}/xmlBlaster.jar:{1}/jutils.jar:{1}/jhall.jar:{1}/CCOM.jar:{1}/dpws/dpws4j.jar:{1}/dpws/soda-JettyServletContainer.jar:{1}/dpws/soda-jdom.jar:{1}/dpws/wsdl4j-1.6.1.jar:{1}/beaver-rt.jar".format(code, lib)
+
+	scriptPath = os.path.realpath(sys.argv[0])
+	scriptDir = os.path.dirname(scriptPath)
+	os.chdir(scriptDir)
+	
+	try:
+		ret = subprocess.call(["java", "-Xincgc", "-classpath", classpath, "grafchart.sfc.Editor"] + sys.argv[1:]);
+		if ret != 0:
+			die("JGrafchart exited with error code {}.".format(ret))
+	except OSError:
+		die("Java is not installed properly.");
+	except KeyboardInterrupt:
+		print
+
+def die(msg):
+	print "ERROR: {}".format(msg)
+	# Compatibility with Pyton 2.x
+	try:
+		input = raw_input
+	except NameError:
+		pass
+	input("Press Enter to exit...")
+	sys.exit(1)
+
+if __name__ == "__main__":
+	main()

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Your Custom IO package name, e.g. myCustomIO (means grafchart.sfc.io.myCustomIO)
+customIOPackage=
+
+################################################################################
+
+src=../../source
+out=../../Code
+
+javac -classpath $src $src/grafchart/sfc/io/$customIOPackage/*.java -d $out

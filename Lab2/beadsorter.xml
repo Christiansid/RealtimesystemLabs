@@ -1,0 +1,649 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<GCDocument color="-35" dimTicks="25" dpwsInterface="" dpwsPort="-1" height="752" horizontalScrollBar="1" modifiable="1" name="BeadSorter" saveVersion="8" scale="0.81" simulationMode="1" socketHost="" socketIsServer="0" socketPort="-1" socketSendMode="Changed" threadSpeed="10" tokenLuminance="0" verticalScrollBar="1" viewPositionX="0" viewPositionY="-6" width="947" x="3" y="4">
+  <FreeText alignment="0" autoResize="1" backgroundColor="-1" bold="1" clipping="0" draggable="1" editOnSingleClick="1" editable="1" fontName="Serif" fontSize="16" height="22" italic="0" multiline="0" name="" resizable="1" selectBackground="0" selectable="1" strikeThrough="0" text="Inputs" textColor="-16777216" transparent="1" twoDScale="0" underline="0" visible="1" width="42" x="20" y="50"/>
+  <DigitalIn channel="30" cyclic="1" height="58" name="Tilt" value="1" width="90" x="140" y="40"/>
+  <AnalogIn channel="32" cyclic="1" height="58" name="AnalogBead" value="0.225" width="90" x="360" y="40"/>
+  <BooleanVariable constant="0" exp="" height="60" initialValue="" name="Color" updated="0" value="0" width="90" x="470" y="40"/>
+  <BooleanVariable constant="0" exp="" height="60" initialValue="" name="Bead" updated="0" value="1" width="90" x="580" y="40"/>
+  <AnalogIn channel="35" cyclic="1" height="58" name="Col" value="9.11" width="90" x="250" y="40"/>
+  <FreeText alignment="0" autoResize="1" backgroundColor="-1" bold="1" clipping="0" draggable="1" editOnSingleClick="1" editable="1" fontName="Serif" fontSize="16" height="22" italic="0" multiline="0" name="" resizable="1" selectBackground="0" selectable="1" strikeThrough="0" text="Outputs" textColor="-16777216" transparent="1" twoDScale="0" underline="0" visible="1" width="53" x="20" y="150"/>
+  <DigitalOut1 channel="30" height="58" name="Sol1" value="1" width="100" x="140" y="140"/>
+  <DigitalOut1 channel="31" height="58" name="Sol2" value="1" width="100" x="250" y="140"/>
+  <DigitalOut1 channel="32" height="58" name="Sol3" value="1" width="100" x="360" y="140"/>
+  <DigitalOut1 channel="33" height="58" name="Sol4" value="1" width="100" x="470" y="140"/>
+  <DigitalOut1 channel="37" height="58" name="LED" value="1" width="100" x="580" y="140"/>
+  <DigitalOut channel="35" height="58" name="ResetBead" value="0" width="100" x="690" y="140"/>
+  <DigitalOut channel="36" height="58" name="ResetColor" value="0" width="100" x="800" y="140"/>
+  <FreeText alignment="0" autoResize="1" backgroundColor="-1" bold="1" clipping="0" draggable="1" editOnSingleClick="1" editable="1" fontName="Serif" fontSize="16" height="22" italic="0" multiline="0" name="" resizable="1" selectBackground="0" selectable="1" strikeThrough="0" text="Parameters" textColor="-16777216" transparent="1" twoDScale="0" underline="0" visible="1" width="77" x="20" y="240"/>
+  <IntegerVariable constant="0" exp="" height="58" initialValue="" name="SortReleaseTime" updated="0" value="5" width="65" x="136" y="230"/>
+  <IntegerVariable constant="0" exp="" height="58" initialValue="10" name="SortWaitTime" updated="0" value="10" width="65" x="235" y="230"/>
+  <IntegerVariable constant="0" exp="" height="58" initialValue="" name="SeqReleaseTime" updated="0" value="6" width="65" x="355" y="230"/>
+  <IntegerVariable constant="0" exp="" height="58" initialValue="" name="SeqWaitTime" updated="0" value="10" width="65" x="445" y="230"/>
+  <BooleanVariable constant="0" exp="" height="60" initialValue="0" name="Sort" updated="0" value="0" width="65" x="760" y="230"/>
+  <BooleanVariable constant="0" exp="" height="60" initialValue="0" name="Seq" updated="0" value="0" width="65" x="830" y="230"/>
+  <IntegerVariable constant="0" exp="" height="58" initialValue="" name="NbrBlack" updated="0" value="3" width="65" x="570" y="230"/>
+  <IntegerVariable constant="0" exp="" height="58" initialValue="" name="NbrYellow" updated="0" value="3" width="65" x="640" y="230"/>
+  <FreeText alignment="0" autoResize="1" backgroundColor="-1" bold="1" clipping="0" draggable="1" editOnSingleClick="1" editable="1" fontName="Serif" fontSize="20" height="27" italic="0" multiline="0" name="" resizable="1" selectBackground="0" selectable="1" strikeThrough="0" text="Sort" textColor="-16777216" transparent="1" twoDScale="0" underline="0" visible="1" width="36" x="120" y="330"/>
+  <FreeText alignment="0" autoResize="1" backgroundColor="-1" bold="1" clipping="0" draggable="1" editOnSingleClick="1" editable="1" fontName="Serif" fontSize="20" height="27" italic="0" multiline="0" name="" resizable="1" selectBackground="0" selectable="1" strikeThrough="0" text="Sequence" textColor="-16777216" transparent="1" twoDScale="0" underline="0" visible="1" width="80" x="470" y="330"/>
+  <GCInitialStep actionBlockVisible="1" actionText="S Sol3 = 1;&#10;S Sol4 = 1;" fileName="" height="70" id="f020406b-4686-41d1-87a1-c027efaed131" name="Sort_Init" useIcon="0" width="200" x="90" y="395"/>
+  <GCTransition actionText="Sort &amp; Seq_Init.x" conditionVisible="1" height="25" id="02c61d6b-8d7b-4aef-8808-d073cd45004a" width="30" x="105" y="480"/>
+  <GCStep actionBlockVisible="1" actionText="S Sort = 0;&#10;S Sol4 = 0;" fileName="" height="70" id="205ef4d8-72b8-4843-8dd5-24cce85f30ff" name="" useIcon="0" width="200" x="90" y="515"/>
+  <GCTransition actionText="Sort_Wait.s &gt; 4" conditionVisible="1" height="25" id="6bcbb0c9-d39b-4995-815c-025c6a5c3a8f" width="30" x="105" y="710"/>
+  <GCTransition actionText="1" conditionVisible="1" height="25" id="80e5c236-8381-4695-bc06-a5e6fdaf8e67" width="30" x="105" y="820"/>
+  <GCInitialStep actionBlockVisible="1" actionText="S Sol1 = 1;&#10;S Sol2 = 1;" fileName="" height="70" id="5197129a-81bc-4cea-8e2f-c95c9fb83d6c" name="Seq_Init" useIcon="0" width="200" x="450" y="385"/>
+  <GCTransition actionText="Seq &amp; Sort_Init.x" conditionVisible="1" height="25" id="8454e011-a7d8-4a8d-9b76-e83474c436a6" width="30" x="465" y="470"/>
+  <GCStep actionBlockVisible="1" actionText="S Seq = 0;&#10;S Sol1 = 0;&#10;S Sol2 = 0;" fileName="" height="70" id="8355f339-5c17-4641-959c-e9fa565b6d48" name="" useIcon="0" width="200" x="450" y="505"/>
+  <GCTransition actionText="Seq_Wait.s &gt; 4" conditionVisible="1" height="25" id="0fdf3a6e-9395-400f-9b6c-bb7d92e15d29" width="30" x="465" y="710"/>
+  <GCTransition actionText="1" conditionVisible="1" height="25" id="1d6c0d34-8fbb-44f2-a3c6-39f07514cd44" width="30" x="465" y="820"/>
+  <AssignmentButton action="S Sort = Sort_Init.x &amp; Seq_Init.x;" alwaysAct="0" height="35" name="START SORT" width="120" x="750" y="340"/>
+  <AssignmentButton action="S Seq = Sort_Init.x &amp; Seq_Init.x;" alwaysAct="0" height="35" name="START SEQ." width="120" x="750" y="390"/>
+  <AssignmentButton action="S Sol1 = 1;" alwaysAct="0" height="35" name="Sol1 ON" width="100" x="970" y="130"/>
+  <AssignmentButton action="S Sol1 = 0;" alwaysAct="0" height="35" name="Sol1 OFF" width="100" x="970" y="180"/>
+  <AssignmentButton action="S Sol2 = 1;" alwaysAct="0" height="35" name="Sol2 ON" width="100" x="970" y="230"/>
+  <AssignmentButton action="S Sol2 = 0;" alwaysAct="0" height="35" name="Sol2 OFF" width="98" x="970" y="280"/>
+  <AssignmentButton action="S Sol3 = 1;" alwaysAct="0" height="35" name="Sol3 ON" width="100" x="970" y="330"/>
+  <AssignmentButton action="S Sol3 = 0;" alwaysAct="0" height="35" name="Sol3 OFF" width="100" x="970" y="380"/>
+  <AssignmentButton action="S Sol4 = 0;" alwaysAct="0" height="35" name="Sol4 OFF" width="100" x="970" y="480"/>
+  <AssignmentButton action="S Sol4 = 1;" alwaysAct="0" height="35" name="Sol4 ON" width="100" x="970" y="430"/>
+  <AssignmentButton action="S ResetColor = 0;" alwaysAct="0" height="35" name="ResetColor OFF" width="140" x="970" y="580"/>
+  <AssignmentButton action="S ResetColor = 1;" alwaysAct="0" height="35" name="ResetColor ON" width="140" x="970" y="530"/>
+  <AssignmentButton action="S LED = 1;" alwaysAct="0" height="35" name="LED ON" width="100" x="970" y="30"/>
+  <AssignmentButton action="S LED = 0;" alwaysAct="0" height="35" name="LED OFF" width="100" x="970" y="80"/>
+  <WorkspaceObject enabled="1" fileName="" height="60" horizontalScrollBar="1" name="ColorLogic" ownerClass="" scanCycle="1" useIcon="0" verticalScrollBar="1" width="60" x="750" y="460">
+    <GCDocument color="-1" height="377" scale="1.0" socketSendMode="Inherit" viewPositionX="0" viewPositionY="0" width="324" x="357" y="241">
+      <GCInitialStep actionBlockVisible="1" actionText="S Color = 0;" fileName="" height="70" id="12928ab4-b38e-4a40-8656-2ca2a684e011" name="" useIcon="0" width="200" x="70" y="45"/>
+      <GCStep actionBlockVisible="1" actionText="S Color = 1;" fileName="" height="70" id="b83734bc-8ace-4be0-aa58-adee81420740" name="" useIcon="0" width="200" x="70" y="165"/>
+      <GCTransition actionText="Col &lt; 7.5" conditionVisible="1" height="25" id="ea8428db-e568-40d7-825d-ea48326b777f" width="30" x="85" y="130"/>
+      <GCTransition actionText="Col &gt; 7.5" conditionVisible="1" height="25" id="1f9ca521-0cd5-4a9a-8539-cf98cc909374" width="30" x="85" y="250"/>
+      <GCLink fromObject="1f9ca521-0cd5-4a9a-8539-cf98cc909374" manAdj="1" toObject="12928ab4-b38e-4a40-8656-2ca2a684e011">
+        <Stroke x="100" y="275"/>
+        <Stroke x="100" y="285"/>
+        <Stroke x="50" y="285"/>
+        <Stroke x="50" y="35"/>
+        <Stroke x="100" y="35"/>
+        <Stroke x="100" y="45"/>
+      </GCLink>
+      <GCLink fromObject="b83734bc-8ace-4be0-aa58-adee81420740" manAdj="0" toObject="1f9ca521-0cd5-4a9a-8539-cf98cc909374">
+        <Stroke x="100" y="235"/>
+        <Stroke x="100" y="245"/>
+        <Stroke x="100" y="245"/>
+        <Stroke x="100" y="240"/>
+        <Stroke x="100" y="240"/>
+        <Stroke x="100" y="250"/>
+      </GCLink>
+      <GCLink fromObject="ea8428db-e568-40d7-825d-ea48326b777f" manAdj="0" toObject="b83734bc-8ace-4be0-aa58-adee81420740">
+        <Stroke x="100" y="155"/>
+        <Stroke x="100" y="165"/>
+        <Stroke x="100" y="165"/>
+        <Stroke x="100" y="155"/>
+        <Stroke x="100" y="155"/>
+        <Stroke x="100" y="165"/>
+      </GCLink>
+      <GCLink fromObject="12928ab4-b38e-4a40-8656-2ca2a684e011" manAdj="0" toObject="ea8428db-e568-40d7-825d-ea48326b777f">
+        <Stroke x="100" y="115"/>
+        <Stroke x="100" y="125"/>
+        <Stroke x="100" y="125"/>
+        <Stroke x="100" y="120"/>
+        <Stroke x="100" y="120"/>
+        <Stroke x="100" y="130"/>
+      </GCLink>
+    </GCDocument>
+  </WorkspaceObject>
+  <GCTransition actionText="Tilt" conditionVisible="1" height="25" id="49279644-9596-4be3-b4cf-f0d41c5023dc" width="30" x="105" y="600"/>
+  <GCTransition actionText="!Tilt" conditionVisible="1" height="25" id="24bc6761-3fae-49b6-b515-5302e1297f15" width="30" x="465" y="590"/>
+  <GCStep actionBlockVisible="0" actionText=";" fileName="" height="70" id="97bdf0db-095b-4369-9eb5-a74cfdeb1175" name="Sort_Wait" useIcon="0" width="60" x="90" y="635"/>
+  <GCStep actionBlockVisible="0" actionText=";" fileName="" height="70" id="5cd68758-f887-44a9-a784-9d642c027e2f" name="Seq_Wait" useIcon="0" width="60" x="450" y="625"/>
+  <WorkspaceObject enabled="1" fileName="" height="60" horizontalScrollBar="1" name="BeadLogic" ownerClass="" scanCycle="1" useIcon="0" verticalScrollBar="1" width="60" x="829" y="460">
+    <GCDocument color="-1" height="377" scale="1.0" socketSendMode="Inherit" viewPositionX="0" viewPositionY="0" width="376" x="504" y="382">
+      <GCInitialStep actionBlockVisible="1" actionText="S Bead = 0;" fileName="" height="70" id="87f6c154-83df-4aa6-90c1-cdad06dc3ecc" name="" useIcon="0" width="200" x="70" y="45"/>
+      <GCStep actionBlockVisible="1" actionText="S Bead = 1;" fileName="" height="70" id="80d653f6-31c7-4cb4-b228-46f3f1ab8fe3" name="" useIcon="0" width="200" x="70" y="165"/>
+      <GCTransition actionText="AnalogBead &gt; 3" conditionVisible="1" height="25" id="1695c13a-750e-44b0-b907-7148e31560fb" width="30" x="85" y="130"/>
+      <GCTransition actionText="AnalogBead &lt; 1" conditionVisible="1" height="25" id="517711ea-546c-4a34-b54a-84521b1898ac" width="30" x="85" y="250"/>
+      <GCLink fromObject="517711ea-546c-4a34-b54a-84521b1898ac" manAdj="1" toObject="87f6c154-83df-4aa6-90c1-cdad06dc3ecc">
+        <Stroke x="100" y="275"/>
+        <Stroke x="100" y="285"/>
+        <Stroke x="49" y="285"/>
+        <Stroke x="49" y="35"/>
+        <Stroke x="100" y="35"/>
+        <Stroke x="100" y="45"/>
+      </GCLink>
+      <GCLink fromObject="80d653f6-31c7-4cb4-b228-46f3f1ab8fe3" manAdj="0" toObject="517711ea-546c-4a34-b54a-84521b1898ac">
+        <Stroke x="100" y="235"/>
+        <Stroke x="100" y="245"/>
+        <Stroke x="100" y="245"/>
+        <Stroke x="100" y="240"/>
+        <Stroke x="100" y="240"/>
+        <Stroke x="100" y="250"/>
+      </GCLink>
+      <GCLink fromObject="1695c13a-750e-44b0-b907-7148e31560fb" manAdj="0" toObject="80d653f6-31c7-4cb4-b228-46f3f1ab8fe3">
+        <Stroke x="100" y="155"/>
+        <Stroke x="100" y="165"/>
+        <Stroke x="100" y="165"/>
+        <Stroke x="100" y="155"/>
+        <Stroke x="100" y="155"/>
+        <Stroke x="100" y="165"/>
+      </GCLink>
+      <GCLink fromObject="87f6c154-83df-4aa6-90c1-cdad06dc3ecc" manAdj="0" toObject="1695c13a-750e-44b0-b907-7148e31560fb">
+        <Stroke x="100" y="115"/>
+        <Stroke x="100" y="125"/>
+        <Stroke x="100" y="125"/>
+        <Stroke x="100" y="120"/>
+        <Stroke x="100" y="120"/>
+        <Stroke x="100" y="130"/>
+      </GCLink>
+    </GCDocument>
+  </WorkspaceObject>
+  <AssignmentButton action="S ResetBead = 1;" alwaysAct="0" height="35" name="ResetBead ON" width="140" x="970" y="630"/>
+  <AssignmentButton action="S ResetBead = 0;" alwaysAct="0" height="35" name="ResetBead OFF" width="140" x="970" y="680"/>
+  <MacroStep actionText=";" fileName="" height="70" id="09925ddb-b42f-4084-a548-e5d502b45bb6" name="Sorting" resumeMode="Default" useIcon="0" width="60" x="90" y="745">
+    <GCDocument color="-1" height="665" scale="0.9" socketSendMode="Inherit" viewPositionX="-250" viewPositionY="-6" width="929" x="382" y="53">
+      <ExitStep actionBlockVisible="0" actionText="" fileName="" height="85" id="72ccba27-8a9a-4568-b090-c79d670992dd" name="" useIcon="0" width="60" x="560" y="725"/>
+      <EnterStep actionBlockVisible="1" actionText="S ResetColor = 1;&#10;S Sol2 = 1;&#10;S Sol1 = 1;" fileName="" height="85" id="28ff66d0-adca-4725-9b93-aee9b9096411" name="sortMacroInit" useIcon="0" width="170" x="180" y="70"/>
+      <IntegerVariable constant="0" exp="" height="45" initialValue="" name="cycle" updated="0" value="0" width="65" x="490" y="100"/>
+      <GCTransition actionText="1" conditionVisible="1" height="25" id="73f47bed-36e4-46ff-82e3-ce850eb58178" width="30" x="195" y="180"/>
+      <GCStep actionBlockVisible="1" actionText="S ResetColor = 1;&#10;S Sol4 = 0;" fileName="" height="70" id="bd3d6316-4571-4153-9dea-d198cb0101e6" name="resetSensor" useIcon="0" width="200" x="180" y="225"/>
+      <GCTransition actionText="resetSensor.s &gt;= SortWaitTime" conditionVisible="1" height="25" id="a3f7d0ce-894f-4cc3-83b1-4defb6c4cd50" width="30" x="195" y="310"/>
+      <GCStep actionBlockVisible="1" actionText="S ResetColor = 0;&#10;S Sol4 = 0;" fileName="" height="70" id="ceef2fe7-79e3-4720-8703-1e2971c81d0d" name="scanColor" useIcon="0" width="200" x="180" y="335"/>
+      <GCTransition actionText="Color == 1" conditionVisible="1" height="25" id="221d38a0-20fc-4f79-a7ea-9941d5a025fe" width="30" x="-125" y="430"/>
+      <GCStep actionBlockVisible="1" actionText="S Sol3 = 0;&#10;S Sol4 = 1;" fileName="" height="70" id="8e4f6f5f-ac28-4b14-a6a9-33065c78e37e" name="sol3Close" useIcon="0" width="200" x="-140" y="475"/>
+      <GCStep actionBlockVisible="1" actionText="S Sol3 = 1;&#10;S Sol4 = 1;" fileName="" height="70" id="9b72d57c-e1d4-4750-b56e-54c3e78cf0ce" name="sol3Open" useIcon="0" width="200" x="180" y="475"/>
+      <GCTransition actionText="Color == 0" conditionVisible="1" height="25" id="9b5a68f7-5997-42f6-a720-6838cacca129" width="30" x="195" y="430"/>
+      <GCTransition actionText="scanColor.s &gt;= SortWaitTime" conditionVisible="1" height="25" id="0543f03f-02ba-4b38-9cc8-95b9f3af93e1" width="30" x="485" y="440"/>
+      <GCTransition actionText="sol3Close.s &gt;= SortReleaseTime" conditionVisible="0" height="25" id="9978e4bd-981f-4447-af94-d7b989028ed9" width="30" x="-125" y="600"/>
+      <GCTransition actionText="sol3Open.s &gt;= SortReleaseTime" conditionVisible="1" height="25" id="3e9df794-2f73-483b-a55b-895ae87ec2c9" width="30" x="195" y="600"/>
+      <GCStep actionBlockVisible="1" actionText="S cycle = cycle + 1;" fileName="" height="70" id="4969afda-f9c5-4e90-9cc9-cf42bbfbacbf" name="" useIcon="0" width="200" x="560" y="505"/>
+      <GCTransition actionText="cycle &gt;= 3" conditionVisible="1" height="25" id="35e719ea-4b1b-4caa-8763-299257f4a21b" width="30" x="575" y="620"/>
+      <GCTransition actionText="cycle &lt; 3" conditionVisible="1" height="25" id="2883048d-5f59-4a10-870c-7ff0f3ab420c" width="30" x="785" y="620"/>
+      <GCLink fromObject="28ff66d0-adca-4725-9b93-aee9b9096411" manAdj="0" toObject="73f47bed-36e4-46ff-82e3-ce850eb58178">
+        <Stroke x="210" y="156"/>
+        <Stroke x="210" y="166"/>
+        <Stroke x="210" y="167"/>
+        <Stroke x="210" y="167"/>
+        <Stroke x="210" y="169"/>
+        <Stroke x="210" y="179"/>
+      </GCLink>
+      <GCLink fromObject="73f47bed-36e4-46ff-82e3-ce850eb58178" manAdj="0" toObject="bd3d6316-4571-4153-9dea-d198cb0101e6">
+        <Stroke x="210" y="206"/>
+        <Stroke x="210" y="216"/>
+        <Stroke x="210" y="216"/>
+        <Stroke x="210" y="214"/>
+        <Stroke x="210" y="214"/>
+        <Stroke x="210" y="224"/>
+      </GCLink>
+      <GCLink fromObject="bd3d6316-4571-4153-9dea-d198cb0101e6" manAdj="0" toObject="a3f7d0ce-894f-4cc3-83b1-4defb6c4cd50">
+        <Stroke x="210" y="296"/>
+        <Stroke x="210" y="306"/>
+        <Stroke x="210" y="306"/>
+        <Stroke x="210" y="299"/>
+        <Stroke x="210" y="299"/>
+        <Stroke x="210" y="309"/>
+      </GCLink>
+      <GCLink fromObject="a3f7d0ce-894f-4cc3-83b1-4defb6c4cd50" manAdj="0" toObject="ceef2fe7-79e3-4720-8703-1e2971c81d0d">
+        <Stroke x="210" y="336"/>
+        <Stroke x="210" y="346"/>
+        <Stroke x="210" y="346"/>
+        <Stroke x="210" y="324"/>
+        <Stroke x="210" y="324"/>
+        <Stroke x="210" y="334"/>
+      </GCLink>
+      <GCLink fromObject="ceef2fe7-79e3-4720-8703-1e2971c81d0d" manAdj="0" toObject="221d38a0-20fc-4f79-a7ea-9941d5a025fe">
+        <Stroke x="210" y="406"/>
+        <Stroke x="210" y="416"/>
+        <Stroke x="210" y="417"/>
+        <Stroke x="-110" y="417"/>
+        <Stroke x="-110" y="419"/>
+        <Stroke x="-110" y="429"/>
+      </GCLink>
+      <GCLink fromObject="221d38a0-20fc-4f79-a7ea-9941d5a025fe" manAdj="0" toObject="8e4f6f5f-ac28-4b14-a6a9-33065c78e37e">
+        <Stroke x="-110" y="456"/>
+        <Stroke x="-110" y="466"/>
+        <Stroke x="-110" y="466"/>
+        <Stroke x="-110" y="464"/>
+        <Stroke x="-110" y="464"/>
+        <Stroke x="-110" y="474"/>
+      </GCLink>
+      <GCLink fromObject="ceef2fe7-79e3-4720-8703-1e2971c81d0d" manAdj="0" toObject="9b5a68f7-5997-42f6-a720-6838cacca129">
+        <Stroke x="210" y="406"/>
+        <Stroke x="210" y="416"/>
+        <Stroke x="210" y="417"/>
+        <Stroke x="210" y="417"/>
+        <Stroke x="210" y="419"/>
+        <Stroke x="210" y="429"/>
+      </GCLink>
+      <GCLink fromObject="9b5a68f7-5997-42f6-a720-6838cacca129" manAdj="0" toObject="9b72d57c-e1d4-4750-b56e-54c3e78cf0ce">
+        <Stroke x="210" y="456"/>
+        <Stroke x="210" y="466"/>
+        <Stroke x="210" y="466"/>
+        <Stroke x="210" y="464"/>
+        <Stroke x="210" y="464"/>
+        <Stroke x="210" y="474"/>
+      </GCLink>
+      <GCLink fromObject="ceef2fe7-79e3-4720-8703-1e2971c81d0d" manAdj="0" toObject="0543f03f-02ba-4b38-9cc8-95b9f3af93e1">
+        <Stroke x="210" y="406"/>
+        <Stroke x="210" y="416"/>
+        <Stroke x="210" y="422"/>
+        <Stroke x="500" y="422"/>
+        <Stroke x="500" y="429"/>
+        <Stroke x="500" y="439"/>
+      </GCLink>
+      <GCLink fromObject="8e4f6f5f-ac28-4b14-a6a9-33065c78e37e" manAdj="0" toObject="9978e4bd-981f-4447-af94-d7b989028ed9">
+        <Stroke x="-110" y="546"/>
+        <Stroke x="-110" y="556"/>
+        <Stroke x="-110" y="572"/>
+        <Stroke x="-110" y="572"/>
+        <Stroke x="-110" y="589"/>
+        <Stroke x="-110" y="599"/>
+      </GCLink>
+      <GCLink fromObject="9b72d57c-e1d4-4750-b56e-54c3e78cf0ce" manAdj="0" toObject="3e9df794-2f73-483b-a55b-895ae87ec2c9">
+        <Stroke x="210" y="546"/>
+        <Stroke x="210" y="556"/>
+        <Stroke x="210" y="572"/>
+        <Stroke x="210" y="572"/>
+        <Stroke x="210" y="589"/>
+        <Stroke x="210" y="599"/>
+      </GCLink>
+      <GCLink fromObject="9978e4bd-981f-4447-af94-d7b989028ed9" manAdj="1" toObject="bd3d6316-4571-4153-9dea-d198cb0101e6">
+        <Stroke x="-110" y="626"/>
+        <Stroke x="-110" y="636"/>
+        <Stroke x="-207" y="636"/>
+        <Stroke x="-207" y="214"/>
+        <Stroke x="210" y="214"/>
+        <Stroke x="210" y="224"/>
+      </GCLink>
+      <GCLink fromObject="3e9df794-2f73-483b-a55b-895ae87ec2c9" manAdj="1" toObject="bd3d6316-4571-4153-9dea-d198cb0101e6">
+        <Stroke x="210" y="626"/>
+        <Stroke x="210" y="636"/>
+        <Stroke x="-207" y="636"/>
+        <Stroke x="-207" y="214"/>
+        <Stroke x="210" y="214"/>
+        <Stroke x="210" y="224"/>
+      </GCLink>
+      <GCLink fromObject="0543f03f-02ba-4b38-9cc8-95b9f3af93e1" manAdj="0" toObject="4969afda-f9c5-4e90-9cc9-cf42bbfbacbf">
+        <Stroke x="500" y="466"/>
+        <Stroke x="500" y="476"/>
+        <Stroke x="500" y="485"/>
+        <Stroke x="590" y="485"/>
+        <Stroke x="590" y="494"/>
+        <Stroke x="590" y="504"/>
+      </GCLink>
+      <GCLink fromObject="4969afda-f9c5-4e90-9cc9-cf42bbfbacbf" manAdj="0" toObject="35e719ea-4b1b-4caa-8763-299257f4a21b">
+        <Stroke x="590" y="576"/>
+        <Stroke x="590" y="586"/>
+        <Stroke x="590" y="597"/>
+        <Stroke x="590" y="597"/>
+        <Stroke x="590" y="609"/>
+        <Stroke x="590" y="619"/>
+      </GCLink>
+      <GCLink fromObject="35e719ea-4b1b-4caa-8763-299257f4a21b" manAdj="0" toObject="72ccba27-8a9a-4568-b090-c79d670992dd">
+        <Stroke x="590" y="646"/>
+        <Stroke x="590" y="656"/>
+        <Stroke x="590" y="685"/>
+        <Stroke x="590" y="685"/>
+        <Stroke x="590" y="714"/>
+        <Stroke x="590" y="724"/>
+      </GCLink>
+      <GCLink fromObject="4969afda-f9c5-4e90-9cc9-cf42bbfbacbf" manAdj="0" toObject="2883048d-5f59-4a10-870c-7ff0f3ab420c">
+        <Stroke x="590" y="576"/>
+        <Stroke x="590" y="586"/>
+        <Stroke x="590" y="597"/>
+        <Stroke x="800" y="597"/>
+        <Stroke x="800" y="609"/>
+        <Stroke x="800" y="619"/>
+      </GCLink>
+      <GCLink fromObject="2883048d-5f59-4a10-870c-7ff0f3ab420c" manAdj="0" toObject="bd3d6316-4571-4153-9dea-d198cb0101e6">
+        <Stroke x="800" y="646"/>
+        <Stroke x="800" y="656"/>
+        <Stroke x="932" y="656"/>
+        <Stroke x="932" y="214"/>
+        <Stroke x="210" y="214"/>
+        <Stroke x="210" y="224"/>
+      </GCLink>
+    </GCDocument>
+  </MacroStep>
+  <MacroStep actionText=";" fileName="" height="70" id="797dee64-85d6-4332-a92b-0e5090538032" name="Sequencing" resumeMode="Default" useIcon="0" width="60" x="450" y="745">
+    <GCDocument color="-1" height="388" scale="1.0" socketSendMode="Inherit" viewPositionX="-24" viewPositionY="-90" width="247" x="65" y="81">
+      <ExitStep actionBlockVisible="0" actionText="" fileName="" height="85" id="056c918a-ef24-41a6-a490-d6503413f561" name="" useIcon="0" width="60" x="650" y="1145"/>
+      <EnterStep actionBlockVisible="1" actionText="S ResetBead = 1;" fileName="" height="85" id="903ee04d-5271-4ed3-843b-c09fb651cfb7" name="" useIcon="0" width="170" x="360" y="-180"/>
+      <GCStep actionBlockVisible="1" actionText="S Sol1 = 0;&#10;S ResetBead = 0;" fileName="" height="70" id="ca208874-8018-44a3-a688-9541812cba46" name="scanComp1" useIcon="0" width="200" x="370" y="175"/>
+      <GCTransition actionText="openComp1.s &gt; SeqReleaseTime" conditionVisible="1" height="25" id="594c26a5-df14-43e6-8bf3-a6e4e1c2aabf" width="30" x="375" y="70"/>
+      <GCTransition actionText="1" conditionVisible="1" height="25" id="f553f154-03fc-42ba-b4db-21f9aad7f0d3" width="30" x="375" y="-60"/>
+      <GCStep actionBlockVisible="1" actionText="S Sol1 = 1;&#10;S ResetBead = 1;&#10;" fileName="" height="70" id="3647432e-cfcf-4ff5-a455-921492ba061b" name="openComp1" useIcon="0" width="200" x="360" y="-25"/>
+      <GCTransition actionText="Bead == 1" conditionVisible="1" height="25" id="9c7e60b6-3c2e-4eaa-a3c0-26c0e6e10c0b" width="30" x="135" y="290"/>
+      <IntegerVariable constant="0" exp="" height="45" initialValue="0" name="attempts" updated="0" value="0" width="65" x="780" y="-160"/>
+      <GCStep actionBlockVisible="1" actionText="S attempts = 0;&#10;" fileName="" height="70" id="7fc76ae9-0ff7-48ab-84a9-8f7e4b896ee6" name="" useIcon="0" width="200" x="120" y="345"/>
+      <GCTransition actionText="1" conditionVisible="1" height="25" id="2d7d3284-151a-43bc-abf6-b0768b85dc62" width="30" x="135" y="470"/>
+      <GCStep actionBlockVisible="1" actionText="S Sol2 = 1;&#10;S ResetBead = 1;&#10;" fileName="" height="70" id="fa51a3ce-3591-430e-a033-d15f45fa6800" name="openComp2" useIcon="0" width="200" x="120" y="525"/>
+      <GCTransition actionText="openComp2.s &gt; SeqReleaseTime" conditionVisible="1" height="25" id="d89745a2-53a0-4e56-abf9-c7ee100ea711" width="30" x="135" y="630"/>
+      <GCStep actionBlockVisible="1" actionText="S Sol2 = 0;&#10;S ResetBead = 0;" fileName="" height="70" id="e4d578ac-3c78-46fb-9e5c-7b8bc1d88e0e" name="scanComp2" useIcon="0" width="200" x="120" y="675"/>
+      <GCTransition actionText="Bead == 0 &amp; scanComp1.s &gt;= SeqWaitTime" conditionVisible="1" height="25" id="8df3285e-dd67-4722-8483-a7490cffcfca" width="30" x="745" y="290"/>
+      <GCStep actionBlockVisible="1" actionText="S attempts = attempts +1;" fileName="" height="70" id="5e297436-bb2b-40c4-925a-ebf2d8fa2097" name="" useIcon="0" width="200" x="730" y="335"/>
+      <GCTransition actionText="attempts &lt;5" conditionVisible="1" height="25" id="e89f814c-de1d-4920-bfbc-51fa709f4439" width="30" x="895" y="450"/>
+      <GCTransition actionText="attempts &gt;= 5" conditionVisible="1" height="25" id="ce355ff9-7f36-4cc6-839e-b60643a412b3" width="30" x="585" y="450"/>
+      <GCTransition actionText="Bead == 1" conditionVisible="1" height="25" id="432aa194-832b-4f54-9f5f-d2b37b0ceb4b" width="30" x="385" y="780"/>
+      <GCStep actionBlockVisible="1" actionText="S attempts = attempts +1;" fileName="" height="70" id="2b3f6976-34f1-4c07-8504-dd9d8c53603d" name="" useIcon="0" width="200" x="90" y="815"/>
+      <GCTransition actionText="attempts &gt;= 5" conditionVisible="1" height="25" id="bcbcacda-b194-4f78-a9f8-c32517be5011" width="30" x="285" y="1040"/>
+      <GCTransition actionText="attempts &lt;5" conditionVisible="1" height="25" id="93fdb8c8-f398-4a6b-ade4-6c97e7013cc5" width="30" x="-5" y="1000"/>
+      <GCTransition actionText="Bead == 0 &amp; scanComp2.s &gt;= SeqWaitTime" conditionVisible="0" height="25" id="25f42941-8226-4ef9-8a0c-8efbda88ea0b" width="30" x="25" y="770"/>
+      <GCLink fromObject="594c26a5-df14-43e6-8bf3-a6e4e1c2aabf" manAdj="0" toObject="ca208874-8018-44a3-a688-9541812cba46">
+        <Stroke x="390" y="96"/>
+        <Stroke x="390" y="106"/>
+        <Stroke x="390" y="135"/>
+        <Stroke x="400" y="135"/>
+        <Stroke x="400" y="164"/>
+        <Stroke x="400" y="174"/>
+      </GCLink>
+      <GCLink fromObject="903ee04d-5271-4ed3-843b-c09fb651cfb7" manAdj="0" toObject="f553f154-03fc-42ba-b4db-21f9aad7f0d3">
+        <Stroke x="390" y="-94"/>
+        <Stroke x="390" y="-84"/>
+        <Stroke x="390" y="-77"/>
+        <Stroke x="390" y="-77"/>
+        <Stroke x="390" y="-71"/>
+        <Stroke x="390" y="-61"/>
+      </GCLink>
+      <GCLink fromObject="f553f154-03fc-42ba-b4db-21f9aad7f0d3" manAdj="0" toObject="3647432e-cfcf-4ff5-a455-921492ba061b">
+        <Stroke x="390" y="-34"/>
+        <Stroke x="390" y="-24"/>
+        <Stroke x="390" y="-24"/>
+        <Stroke x="390" y="-36"/>
+        <Stroke x="390" y="-36"/>
+        <Stroke x="390" y="-26"/>
+      </GCLink>
+      <GCLink fromObject="3647432e-cfcf-4ff5-a455-921492ba061b" manAdj="0" toObject="594c26a5-df14-43e6-8bf3-a6e4e1c2aabf">
+        <Stroke x="390" y="46"/>
+        <Stroke x="390" y="56"/>
+        <Stroke x="390" y="57"/>
+        <Stroke x="390" y="57"/>
+        <Stroke x="390" y="59"/>
+        <Stroke x="390" y="69"/>
+      </GCLink>
+      <GCLink fromObject="ca208874-8018-44a3-a688-9541812cba46" manAdj="0" toObject="9c7e60b6-3c2e-4eaa-a3c0-26c0e6e10c0b">
+        <Stroke x="400" y="246"/>
+        <Stroke x="400" y="256"/>
+        <Stroke x="400" y="267"/>
+        <Stroke x="150" y="267"/>
+        <Stroke x="150" y="279"/>
+        <Stroke x="150" y="289"/>
+      </GCLink>
+      <GCLink fromObject="9c7e60b6-3c2e-4eaa-a3c0-26c0e6e10c0b" manAdj="0" toObject="7fc76ae9-0ff7-48ab-84a9-8f7e4b896ee6">
+        <Stroke x="150" y="316"/>
+        <Stroke x="150" y="326"/>
+        <Stroke x="150" y="330"/>
+        <Stroke x="150" y="330"/>
+        <Stroke x="150" y="334"/>
+        <Stroke x="150" y="344"/>
+      </GCLink>
+      <GCLink fromObject="7fc76ae9-0ff7-48ab-84a9-8f7e4b896ee6" manAdj="0" toObject="2d7d3284-151a-43bc-abf6-b0768b85dc62">
+        <Stroke x="150" y="416"/>
+        <Stroke x="150" y="426"/>
+        <Stroke x="150" y="442"/>
+        <Stroke x="150" y="442"/>
+        <Stroke x="150" y="459"/>
+        <Stroke x="150" y="469"/>
+      </GCLink>
+      <GCLink fromObject="2d7d3284-151a-43bc-abf6-b0768b85dc62" manAdj="0" toObject="fa51a3ce-3591-430e-a033-d15f45fa6800">
+        <Stroke x="150" y="496"/>
+        <Stroke x="150" y="506"/>
+        <Stroke x="150" y="510"/>
+        <Stroke x="150" y="510"/>
+        <Stroke x="150" y="514"/>
+        <Stroke x="150" y="524"/>
+      </GCLink>
+      <GCLink fromObject="fa51a3ce-3591-430e-a033-d15f45fa6800" manAdj="0" toObject="d89745a2-53a0-4e56-abf9-c7ee100ea711">
+        <Stroke x="150" y="596"/>
+        <Stroke x="150" y="606"/>
+        <Stroke x="150" y="612"/>
+        <Stroke x="150" y="612"/>
+        <Stroke x="150" y="619"/>
+        <Stroke x="150" y="629"/>
+      </GCLink>
+      <GCLink fromObject="d89745a2-53a0-4e56-abf9-c7ee100ea711" manAdj="0" toObject="e4d578ac-3c78-46fb-9e5c-7b8bc1d88e0e">
+        <Stroke x="150" y="656"/>
+        <Stroke x="150" y="666"/>
+        <Stroke x="150" y="666"/>
+        <Stroke x="150" y="664"/>
+        <Stroke x="150" y="664"/>
+        <Stroke x="150" y="674"/>
+      </GCLink>
+      <GCLink fromObject="ca208874-8018-44a3-a688-9541812cba46" manAdj="0" toObject="8df3285e-dd67-4722-8483-a7490cffcfca">
+        <Stroke x="400" y="246"/>
+        <Stroke x="400" y="256"/>
+        <Stroke x="400" y="267"/>
+        <Stroke x="760" y="267"/>
+        <Stroke x="760" y="279"/>
+        <Stroke x="760" y="289"/>
+      </GCLink>
+      <GCLink fromObject="8df3285e-dd67-4722-8483-a7490cffcfca" manAdj="0" toObject="5e297436-bb2b-40c4-925a-ebf2d8fa2097">
+        <Stroke x="760" y="316"/>
+        <Stroke x="760" y="326"/>
+        <Stroke x="760" y="326"/>
+        <Stroke x="760" y="324"/>
+        <Stroke x="760" y="324"/>
+        <Stroke x="760" y="334"/>
+      </GCLink>
+      <GCLink fromObject="5e297436-bb2b-40c4-925a-ebf2d8fa2097" manAdj="0" toObject="ce355ff9-7f36-4cc6-839e-b60643a412b3">
+        <Stroke x="760" y="406"/>
+        <Stroke x="760" y="416"/>
+        <Stroke x="760" y="427"/>
+        <Stroke x="600" y="427"/>
+        <Stroke x="600" y="439"/>
+        <Stroke x="600" y="449"/>
+      </GCLink>
+      <GCLink fromObject="5e297436-bb2b-40c4-925a-ebf2d8fa2097" manAdj="0" toObject="e89f814c-de1d-4920-bfbc-51fa709f4439">
+        <Stroke x="760" y="406"/>
+        <Stroke x="760" y="416"/>
+        <Stroke x="760" y="427"/>
+        <Stroke x="910" y="427"/>
+        <Stroke x="910" y="439"/>
+        <Stroke x="910" y="449"/>
+      </GCLink>
+      <GCLink fromObject="e89f814c-de1d-4920-bfbc-51fa709f4439" manAdj="1" toObject="3647432e-cfcf-4ff5-a455-921492ba061b">
+        <Stroke x="910" y="476"/>
+        <Stroke x="910" y="486"/>
+        <Stroke x="1235" y="486"/>
+        <Stroke x="1235" y="-36"/>
+        <Stroke x="390" y="-36"/>
+        <Stroke x="390" y="-26"/>
+      </GCLink>
+      <GCLink fromObject="ce355ff9-7f36-4cc6-839e-b60643a412b3" manAdj="1" toObject="056c918a-ef24-41a6-a490-d6503413f561">
+        <Stroke x="600" y="476"/>
+        <Stroke x="600" y="486"/>
+        <Stroke x="600" y="722"/>
+        <Stroke x="680" y="722"/>
+        <Stroke x="680" y="1134"/>
+        <Stroke x="680" y="1144"/>
+      </GCLink>
+      <GCLink fromObject="e4d578ac-3c78-46fb-9e5c-7b8bc1d88e0e" manAdj="0" toObject="432aa194-832b-4f54-9f5f-d2b37b0ceb4b">
+        <Stroke x="150" y="746"/>
+        <Stroke x="150" y="756"/>
+        <Stroke x="150" y="762"/>
+        <Stroke x="400" y="762"/>
+        <Stroke x="400" y="769"/>
+        <Stroke x="400" y="779"/>
+      </GCLink>
+      <GCLink fromObject="2b3f6976-34f1-4c07-8504-dd9d8c53603d" manAdj="0" toObject="93fdb8c8-f398-4a6b-ade4-6c97e7013cc5">
+        <Stroke x="120" y="886"/>
+        <Stroke x="120" y="896"/>
+        <Stroke x="120" y="942"/>
+        <Stroke x="10" y="942"/>
+        <Stroke x="10" y="989"/>
+        <Stroke x="10" y="999"/>
+      </GCLink>
+      <GCLink fromObject="2b3f6976-34f1-4c07-8504-dd9d8c53603d" manAdj="0" toObject="bcbcacda-b194-4f78-a9f8-c32517be5011">
+        <Stroke x="120" y="886"/>
+        <Stroke x="120" y="896"/>
+        <Stroke x="120" y="962"/>
+        <Stroke x="300" y="962"/>
+        <Stroke x="300" y="1029"/>
+        <Stroke x="300" y="1039"/>
+      </GCLink>
+      <GCLink fromObject="e4d578ac-3c78-46fb-9e5c-7b8bc1d88e0e" manAdj="0" toObject="25f42941-8226-4ef9-8a0c-8efbda88ea0b">
+        <Stroke x="150" y="746"/>
+        <Stroke x="150" y="756"/>
+        <Stroke x="150" y="757"/>
+        <Stroke x="40" y="757"/>
+        <Stroke x="40" y="759"/>
+        <Stroke x="40" y="769"/>
+      </GCLink>
+      <GCLink fromObject="25f42941-8226-4ef9-8a0c-8efbda88ea0b" manAdj="0" toObject="2b3f6976-34f1-4c07-8504-dd9d8c53603d">
+        <Stroke x="40" y="796"/>
+        <Stroke x="40" y="806"/>
+        <Stroke x="63" y="806"/>
+        <Stroke x="63" y="804"/>
+        <Stroke x="120" y="804"/>
+        <Stroke x="120" y="814"/>
+      </GCLink>
+      <GCLink fromObject="bcbcacda-b194-4f78-a9f8-c32517be5011" manAdj="1" toObject="056c918a-ef24-41a6-a490-d6503413f561">
+        <Stroke x="300" y="1066"/>
+        <Stroke x="300" y="1076"/>
+        <Stroke x="566" y="1076"/>
+        <Stroke x="566" y="1134"/>
+        <Stroke x="680" y="1134"/>
+        <Stroke x="680" y="1144"/>
+      </GCLink>
+      <GCLink fromObject="93fdb8c8-f398-4a6b-ade4-6c97e7013cc5" manAdj="1" toObject="fa51a3ce-3591-430e-a033-d15f45fa6800">
+        <Stroke x="10" y="1026"/>
+        <Stroke x="10" y="1036"/>
+        <Stroke x="-24" y="1036"/>
+        <Stroke x="-24" y="514"/>
+        <Stroke x="150" y="514"/>
+        <Stroke x="150" y="524"/>
+      </GCLink>
+      <GCLink fromObject="432aa194-832b-4f54-9f5f-d2b37b0ceb4b" manAdj="1" toObject="3647432e-cfcf-4ff5-a455-921492ba061b">
+        <Stroke x="400" y="806"/>
+        <Stroke x="400" y="816"/>
+        <Stroke x="1268" y="816"/>
+        <Stroke x="1268" y="-36"/>
+        <Stroke x="390" y="-36"/>
+        <Stroke x="390" y="-26"/>
+      </GCLink>
+    </GCDocument>
+  </MacroStep>
+  <GCLink fromObject="5cd68758-f887-44a9-a784-9d642c027e2f" manAdj="0" toObject="0fdf3a6e-9395-400f-9b6c-bb7d92e15d29">
+    <Stroke x="480" y="695"/>
+    <Stroke x="480" y="705"/>
+    <Stroke x="480" y="705"/>
+    <Stroke x="480" y="700"/>
+    <Stroke x="480" y="700"/>
+    <Stroke x="480" y="710"/>
+  </GCLink>
+  <GCLink fromObject="24bc6761-3fae-49b6-b515-5302e1297f15" manAdj="0" toObject="5cd68758-f887-44a9-a784-9d642c027e2f">
+    <Stroke x="480" y="615"/>
+    <Stroke x="480" y="625"/>
+    <Stroke x="480" y="625"/>
+    <Stroke x="480" y="615"/>
+    <Stroke x="480" y="615"/>
+    <Stroke x="480" y="625"/>
+  </GCLink>
+  <GCLink fromObject="97bdf0db-095b-4369-9eb5-a74cfdeb1175" manAdj="0" toObject="6bcbb0c9-d39b-4995-815c-025c6a5c3a8f">
+    <Stroke x="120" y="705"/>
+    <Stroke x="120" y="715"/>
+    <Stroke x="120" y="715"/>
+    <Stroke x="120" y="700"/>
+    <Stroke x="120" y="700"/>
+    <Stroke x="120" y="710"/>
+  </GCLink>
+  <GCLink fromObject="49279644-9596-4be3-b4cf-f0d41c5023dc" manAdj="0" toObject="97bdf0db-095b-4369-9eb5-a74cfdeb1175">
+    <Stroke x="120" y="625"/>
+    <Stroke x="120" y="635"/>
+    <Stroke x="120" y="635"/>
+    <Stroke x="120" y="625"/>
+    <Stroke x="120" y="625"/>
+    <Stroke x="120" y="635"/>
+  </GCLink>
+  <GCLink fromObject="8355f339-5c17-4641-959c-e9fa565b6d48" manAdj="0" toObject="24bc6761-3fae-49b6-b515-5302e1297f15">
+    <Stroke x="480" y="575"/>
+    <Stroke x="480" y="585"/>
+    <Stroke x="480" y="585"/>
+    <Stroke x="480" y="580"/>
+    <Stroke x="480" y="580"/>
+    <Stroke x="480" y="590"/>
+  </GCLink>
+  <GCLink fromObject="205ef4d8-72b8-4843-8dd5-24cce85f30ff" manAdj="0" toObject="49279644-9596-4be3-b4cf-f0d41c5023dc">
+    <Stroke x="120" y="585"/>
+    <Stroke x="120" y="595"/>
+    <Stroke x="120" y="595"/>
+    <Stroke x="120" y="590"/>
+    <Stroke x="120" y="590"/>
+    <Stroke x="120" y="600"/>
+  </GCLink>
+  <GCLink fromObject="02c61d6b-8d7b-4aef-8808-d073cd45004a" manAdj="0" toObject="205ef4d8-72b8-4843-8dd5-24cce85f30ff">
+    <Stroke x="120" y="506"/>
+    <Stroke x="120" y="516"/>
+    <Stroke x="120" y="516"/>
+    <Stroke x="120" y="504"/>
+    <Stroke x="120" y="504"/>
+    <Stroke x="120" y="514"/>
+  </GCLink>
+  <GCLink fromObject="1d6c0d34-8fbb-44f2-a3c6-39f07514cd44" manAdj="1" toObject="5197129a-81bc-4cea-8e2f-c95c9fb83d6c">
+    <Stroke x="480" y="845"/>
+    <Stroke x="480" y="855"/>
+    <Stroke x="360" y="855"/>
+    <Stroke x="360" y="375"/>
+    <Stroke x="480" y="375"/>
+    <Stroke x="480" y="385"/>
+  </GCLink>
+  <GCLink fromObject="8454e011-a7d8-4a8d-9b76-e83474c436a6" manAdj="0" toObject="8355f339-5c17-4641-959c-e9fa565b6d48">
+    <Stroke x="480" y="495"/>
+    <Stroke x="480" y="505"/>
+    <Stroke x="480" y="505"/>
+    <Stroke x="480" y="495"/>
+    <Stroke x="480" y="495"/>
+    <Stroke x="480" y="505"/>
+  </GCLink>
+  <GCLink fromObject="5197129a-81bc-4cea-8e2f-c95c9fb83d6c" manAdj="0" toObject="8454e011-a7d8-4a8d-9b76-e83474c436a6">
+    <Stroke x="480" y="455"/>
+    <Stroke x="480" y="465"/>
+    <Stroke x="480" y="465"/>
+    <Stroke x="480" y="460"/>
+    <Stroke x="480" y="460"/>
+    <Stroke x="480" y="470"/>
+  </GCLink>
+  <GCLink fromObject="80e5c236-8381-4695-bc06-a5e6fdaf8e67" manAdj="1" toObject="f020406b-4686-41d1-87a1-c027efaed131">
+    <Stroke x="120" y="845"/>
+    <Stroke x="120" y="855"/>
+    <Stroke x="10" y="855"/>
+    <Stroke x="10" y="385"/>
+    <Stroke x="120" y="385"/>
+    <Stroke x="120" y="395"/>
+  </GCLink>
+  <GCLink fromObject="f020406b-4686-41d1-87a1-c027efaed131" manAdj="0" toObject="02c61d6b-8d7b-4aef-8808-d073cd45004a">
+    <Stroke x="120" y="466"/>
+    <Stroke x="120" y="476"/>
+    <Stroke x="120" y="476"/>
+    <Stroke x="120" y="469"/>
+    <Stroke x="120" y="469"/>
+    <Stroke x="120" y="479"/>
+  </GCLink>
+  <GCLink fromObject="0fdf3a6e-9395-400f-9b6c-bb7d92e15d29" manAdj="0" toObject="797dee64-85d6-4332-a92b-0e5090538032_0">
+    <Stroke x="480" y="736"/>
+    <Stroke x="480" y="746"/>
+    <Stroke x="480" y="746"/>
+    <Stroke x="480" y="734"/>
+    <Stroke x="480" y="734"/>
+    <Stroke x="480" y="744"/>
+  </GCLink>
+  <GCLink fromObject="797dee64-85d6-4332-a92b-0e5090538032_0" manAdj="0" toObject="1d6c0d34-8fbb-44f2-a3c6-39f07514cd44">
+    <Stroke x="480" y="816"/>
+    <Stroke x="480" y="826"/>
+    <Stroke x="480" y="826"/>
+    <Stroke x="480" y="809"/>
+    <Stroke x="480" y="809"/>
+    <Stroke x="480" y="819"/>
+  </GCLink>
+  <GCLink fromObject="6bcbb0c9-d39b-4995-815c-025c6a5c3a8f" manAdj="0" toObject="09925ddb-b42f-4084-a548-e5d502b45bb6_0">
+    <Stroke x="120" y="735"/>
+    <Stroke x="120" y="745"/>
+    <Stroke x="120" y="745"/>
+    <Stroke x="120" y="735"/>
+    <Stroke x="120" y="735"/>
+    <Stroke x="120" y="745"/>
+  </GCLink>
+  <GCLink fromObject="09925ddb-b42f-4084-a548-e5d502b45bb6_0" manAdj="0" toObject="80e5c236-8381-4695-bc06-a5e6fdaf8e67">
+    <Stroke x="120" y="815"/>
+    <Stroke x="120" y="825"/>
+    <Stroke x="120" y="825"/>
+    <Stroke x="120" y="810"/>
+    <Stroke x="120" y="810"/>
+    <Stroke x="120" y="820"/>
+  </GCLink>
+</GCDocument>

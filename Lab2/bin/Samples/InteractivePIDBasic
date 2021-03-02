@@ -1,0 +1,2 @@
+#! /bin/bash
+"`dirname "$0"`/../run" -load ../ControlLib.xml -loadcompilestart Samples/InteractivePIDBasic.xml "$@"
