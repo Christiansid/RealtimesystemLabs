@@ -111,7 +111,6 @@ public class Regul extends Thread {
             switch (modeMon.getMode()) {
                 case OFF: {
                     /** Written by you */
-                	System.out.println("Off");
                 	y = 0;
                 	u = 0;
                 	yRef = 0;
@@ -120,14 +119,13 @@ public class Regul extends Thread {
                     break;
                 }
                 case BEAM: {
-                	System.out.println("Beam");
                 	synchronized(inner) {
+                		PIref = yRef;
                 		uff = this.refGen.getUff();
                 		PIy = this.ballBeam.getBeamAngle();
-                		PIref = yRef;
                 		PIu = this.limit(this.inner.calculateOutput(PIy, PIref) + uff);
-                		this.inner.updateState(PIu - this.refGen.getUff());	
                     	this.ballBeam.setControlSignal(PIu);
+                		this.inner.updateState(PIu - uff);	
                 	}
                     y = PIy;
                     u = PIu;
@@ -136,28 +134,25 @@ public class Regul extends Thread {
                 }
                 case BALL: {
                     /** Written by you */
-                	PIDy = this.ballBeam.getBallPos();
+                	
             		PIDref = yRef;
             		uff = this.refGen.getUff();
             		phiff = this.refGen.getPhiff();
-            		
+                	PIDy = this.ballBeam.getBallPos();
                 	synchronized(outer) {
-                		PIDu = this.outer.calculateOutput(PIDy, PIDref);
-                		if(PIu >= 10 || PIu <= -10) {
-                			PIDu = this.ballBeam.getBeamAngle() - phiff;
-                		}else {
-                			PIDu = PIDu -phiff;
-                		}
-                		this.outer.updateState(PIDu);
-                		
-                	
+                		PIDu = this.outer.calculateOutput(PIDy, PIDref)+phiff;
+                		//PIref = this.limit(PIDu);
+                		PIref = PIDu;
+                		PIDu = (PIu >= 10 || PIu <= -10) ? this.ballBeam.getBeamAngle() - phiff: PIDu-phiff;
+
+                		this.outer.updateState(this.limit(PIDu));
+
                 	PIy = this.ballBeam.getBeamAngle();
-                	PIref = PIDu;
                 	
                 	synchronized(inner) {
                 		PIu = this.limit(this.inner.calculateOutput(PIy, PIref) + uff);
-                		this.inner.updateState(PIu-uff);
                     	this.ballBeam.setControlSignal(PIu);
+                		this.inner.updateState(PIu-uff);
                 	}
                 	}
                 	y = PIDy;
@@ -178,12 +173,14 @@ public class Regul extends Thread {
             // sleep
             t = t + inner.getHMillis();
             duration = t - System.currentTimeMillis();
+            System.out.println(duration);
             if (duration > 0) {
                 try {
                     sleep(duration);
                 } catch (InterruptedException x) {}
             } else {
                 System.out.println("Lagging behind...");
+                break;
             }
         }
         

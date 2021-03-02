@@ -4,7 +4,7 @@ public class PI {
     private double e;
     private double v;
     private double I;
-    private final double bi;
+    private double bi;
 
     /** Add more private variables here if needed */
 
@@ -13,9 +13,9 @@ public class PI {
         p = new PIParameters();
         // Initial PI Variables
         p.Beta          = 1;
-        p.H             = 0.03;
+        p.H             = 0.04;
         p.integratorOn  = false;
-        p.K             = 2;
+        p.K             = 2.5;
         p.Ti            = 0;
         p.Tr            = 10;
         this.setParameters(p);
@@ -35,7 +35,7 @@ public class PI {
     	//Calculate P
     	double P = p.K*( (p.Beta * yref) -y);
     	//Calculate control signal
-    	this.v = P+this.I;
+    	this.v = P; //+this.I;
     	return this.v;
     }
 
@@ -65,6 +65,7 @@ public class PI {
         /** Written by you */
     	this.p = (PIParameters) newParameters.clone();
     	if(!p.integratorOn) this.I = 0;
+        this.bi = p.K * p.H /p.Ti;
     }
 
     // Sets the I-part of the controller to 0.
